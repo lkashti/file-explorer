@@ -21,8 +21,8 @@ class Controller:
             self.view.NavBar.path.set(self.model.get_home_path())
 
     def update_viewer(self, path):
-        folders, files = self.model.get_folders_contents(path)
-        self.view.Viewer.show_folders_and_files(folders, files)
+        folder_details, file_details = self.model.get_content_from_path(path)
+        self.view.Viewer.show_folders_and_files(folder_details, file_details)
 
 
 if __name__ == '__main__':
