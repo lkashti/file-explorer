@@ -5,11 +5,11 @@ import tkinter.ttk as ttk
 class View:
     def __init__(self, master, controller):
         master.title("File Explorer")
-        self.width = master.winfo_screenwidth() // 2
-        self.height = master.winfo_screenheight() // 2
+        self.width = int(master.winfo_screenwidth()*0.8)
+        self.height = int(master.winfo_screenheight()*0.6)
+        print(self.width," X " ,self.height)
         master.geometry("{}x{}".format(self.width, self.height))
         master.resizable(0, 0)
-
         self.controller = controller
         self.NavBar = NavBar(master, controller, self.width, self.height)
         self.Viewer = Viewer(master, controller, self.width, self.height)
@@ -49,12 +49,12 @@ class Viewer:
 
     def __init__(self, root, controller, width, height):
         self.controller = controller
-        self.viewer_tree = ttk.Treeview(root, height=30)
+        self.viewer_tree = ttk.Treeview(root)
         self.viewer_tree["columns"] = ("one", "two", "three")
-        self.viewer_tree.column("#0", width=270, minwidth=270, stretch=tk.NO)
-        self.viewer_tree.column("one", width=150, minwidth=150, stretch=tk.NO)
-        self.viewer_tree.column("two", width=400, minwidth=200)
-        self.viewer_tree.column("three", width=300, minwidth=50, stretch=tk.NO)
+        self.viewer_tree.column("#0", width=200, minwidth=170, stretch=tk.NO)
+        self.viewer_tree.column("one", width=150, minwidth=120, stretch=tk.NO)
+        self.viewer_tree.column("two", width=100, minwidth=50)
+        self.viewer_tree.column("three", width=100, minwidth=50, stretch=tk.NO)
 
         self.viewer_tree.heading("#0", text="Name", anchor=tk.W)
         self.viewer_tree.heading("one", text="Date modified", anchor=tk.W)
