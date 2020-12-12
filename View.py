@@ -1,18 +1,18 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+import os
 
 
 class View:
     def __init__(self, master, controller):
         master.title("File Explorer")
-        self.width = int(master.winfo_screenwidth()*0.8)
-        self.height = int(master.winfo_screenheight()*0.6)
-        print(self.width," X " ,self.height)
+        self.width = int(master.winfo_screenwidth() * 0.8)
+        self.height = int(master.winfo_screenheight() * 0.6)
         master.geometry("{}x{}".format(self.width, self.height))
         master.resizable(0, 0)
         self.controller = controller
-        self.NavBar = NavBar(master, controller, self.width, self.height)
-        self.Viewer = Viewer(master, controller, self.width, self.height)
+        self.navbar = NavBar(master, controller, self.width, self.height)
+        self.viewer = Viewer(master, controller, self.width, self.height)
 
 
 class NavBar:
@@ -61,7 +61,8 @@ class Viewer:
         self.viewer_tree.heading("two", text="Type", anchor=tk.W)
         self.viewer_tree.heading("three", text="Size", anchor=tk.W)
 
-        self.viewer_tree.grid(row=1, column=0, padx=Viewer.PAD, sticky=tk.W)
+        self.viewer_tree.bind("<Double-1>", self.on_double_click)
+        self.viewer_tree.grid(row=1, column=0, padx=Viewer.PAD, sticky="nsew")
 
     def show_folders_and_files(self, folder_details, file_details):
         idx = 1
@@ -71,9 +72,18 @@ class Viewer:
                                     values=folder_detail[1:])
             idx += 1
         for file_detail in file_details:
-            self.viewer_tree.insert("", index="end", text=folder_detail[0],
+            self.viewer_tree.insert("", index="end", text=file_detail[0],
                                     values=file_detail[1:])
             idx += 1
+
+    def on_double_click(self, event):
+        # get selected item
+        item = self.viewer_tree.selection()[0]
+        item_text = self.viewer_tree.item(item, "text")
+        # clear tree before update
+        if os.path.isdir(item_text):
+            new_path = os.path.join(self.controller.view.navbar.path.get(), item_text)
+            self.controller.update_all_views(new_path)
 
 
 class Folder:

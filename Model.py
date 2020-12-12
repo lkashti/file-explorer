@@ -30,7 +30,10 @@ class Model:
     @staticmethod
     def get_content_from_path(path):
         os.chdir(path)
-        contents = os.listdir(path)
+        try:
+            contents = os.listdir(path)
+        except PermissionError:
+            contents = []
         dir_names = [item for item in contents if os.path.isdir(item)]
         file_names = [item for item in contents if os.path.isfile(item)]
         dir_details = [(dir_name,
