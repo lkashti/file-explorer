@@ -1,6 +1,7 @@
 import os
 import time
 import enum
+from utils.NavigationStack import NavigationStack
 
 
 # Enum for size units
@@ -13,7 +14,7 @@ class SizeUnit(enum.Enum):
 
 class Model:
     def __init__(self):
-        pass
+        self.nav_stack = NavigationStack()
 
     @staticmethod
     def get_home_path():
@@ -29,10 +30,10 @@ class Model:
 
     @staticmethod
     def get_content_from_path(path):
-        os.chdir(path)
         try:
+            os.chdir(path)
             contents = os.listdir(path)
-        except PermissionError:
+        except PermissionError or TypeError:
             contents = []
         dir_names = [item for item in contents if os.path.isdir(item)]
         file_names = [item for item in contents if os.path.isfile(item)]

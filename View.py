@@ -40,8 +40,8 @@ class NavBar:
         self.path_field.configure(textvariable=self.path)
         self.path_field.pack(side=tk.RIGHT, ipady=NavBar.PAD,
                              pady=NavBar.MARGIN_Y)
-        self.home_btn.bind("<Button>", controller.home_btn_handler)
-        # self.back_btn.bind("<Button>", controller.btnHandler)
+        self.home_btn.bind("<Button>", controller.handle_home_event)
+        self.back_btn.bind("<Button>", controller.handle_back_event)
 
 
 class Viewer:
@@ -50,18 +50,20 @@ class Viewer:
     def __init__(self, root, controller, width, height):
         self.controller = controller
         self.viewer_tree = ttk.Treeview(root)
-        self.viewer_tree["columns"] = ("one", "two", "three")
-        self.viewer_tree.column("#0", width=200, minwidth=170, stretch=tk.NO)
-        self.viewer_tree.column("one", width=150, minwidth=120, stretch=tk.NO)
-        self.viewer_tree.column("two", width=100, minwidth=50)
-        self.viewer_tree.column("three", width=100, minwidth=50, stretch=tk.NO)
 
-        self.viewer_tree.heading("#0", text="Name", anchor=tk.W)
-        self.viewer_tree.heading("one", text="Date modified", anchor=tk.W)
-        self.viewer_tree.heading("two", text="Type", anchor=tk.W)
-        self.viewer_tree.heading("three", text="Size", anchor=tk.W)
+        self.viewer_tree["columns"] = ("one", "two", "three","four")
+        self.viewer_tree["show"] = "headings"
+        self.viewer_tree.column("one", width=200, minwidth=170, stretch=tk.NO)
+        self.viewer_tree.column("two", width=150, minwidth=120, stretch=tk.NO)
+        self.viewer_tree.column("three", width=100, minwidth=50)
+        self.viewer_tree.column("four", width=100, minwidth=50, stretch=tk.NO)
 
-        self.viewer_tree.bind("<Double-1>", self.on_double_click)
+        self.viewer_tree.heading("one", text="Name", anchor=tk.W)
+        self.viewer_tree.heading("two", text="Date modified", anchor=tk.W)
+        self.viewer_tree.heading("three", text="Type", anchor=tk.W)
+        self.viewer_tree.heading("four", text="Size", anchor=tk.W)
+
+        self.viewer_tree.bind("<Double-1>", controller.on_double_click)
         self.viewer_tree.grid(row=1, column=0, padx=Viewer.PAD, sticky="nsew")
 
     def show_folders_and_files(self, folder_details, file_details):
@@ -69,21 +71,12 @@ class Viewer:
         for folder_detail in folder_details:
             self.viewer_tree.insert("", index="end", iid=idx,
                                     text=folder_detail[0],
-                                    values=folder_detail[1:])
+                                    values=folder_detail[0:])
             idx += 1
         for file_detail in file_details:
             self.viewer_tree.insert("", index="end", text=file_detail[0],
-                                    values=file_detail[1:])
+                                    values=file_detail[0:])
             idx += 1
-
-    def on_double_click(self, event):
-        # get selected item
-        item = self.viewer_tree.selection()[0]
-        item_text = self.viewer_tree.item(item, "text")
-        # clear tree before update
-        if os.path.isdir(item_text):
-            new_path = os.path.join(self.controller.view.navbar.path.get(), item_text)
-            self.controller.update_all_views(new_path)
 
 
 class Folder:
