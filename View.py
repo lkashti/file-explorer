@@ -6,7 +6,7 @@ from widgets.FavoritesView import FavoritesView
 class View:
     def __init__(self, master, controller):
         master.title("File Explorer")
-        self.width = int(master.winfo_screenwidth() * 0.8)
+        self.width = int(master.winfo_screenwidth() * 0.4)
         self.height = int(master.winfo_screenheight() * 0.6)
         master.geometry("{}x{}".format(self.width, self.height))
         master.resizable(0, 0)
@@ -35,11 +35,24 @@ class NavBar:
         self.forward_btn.pack(side=tk.LEFT, padx=NavBar.MARGIN_X,
                               pady=NavBar.MARGIN_Y)
 
-        self.path_field = tk.Entry(self.navbar_frame, width=int(0.125 * width))
+        self.path_field = tk.Entry(self.navbar_frame, width=int(0.10 * width))
         self.path = tk.StringVar()
         self.path_field.configure(textvariable=self.path)
-        self.path_field.pack(side=tk.RIGHT, ipady=NavBar.PAD,
+        self.path_field.pack(side=tk.LEFT, ipady=NavBar.PAD,
                              pady=NavBar.MARGIN_Y)
+
+        self.search_field = tk.Entry(self.navbar_frame,
+                                     width=int(0.037 * width))
+        self.search_text = tk.StringVar()
+        self.search_field.configure(textvariable=self.search_text)
+        self.search_field.pack(side=tk.RIGHT, ipady=NavBar.PAD,
+                               pady=NavBar.MARGIN_Y)
+        self.search_field.insert(0, "Search...")
+        self.search_field.bind("<FocusIn>",
+                               lambda e: self.search_text.set(""))
+        self.search_field.bind("<FocusOut>",
+                               lambda e: self.search_text.set("Search..."))
+
         self.home_btn.bind("<Button>", controller.handle_home_event)
         self.back_btn.bind("<Button>", controller.handle_back_event)
 
@@ -51,7 +64,7 @@ class Viewer:
 
     def __init__(self, root, controller, width, height):
         self.controller = controller
-        self.viewer_frame = tk.Frame(root, width=int(0.8 * width),
+        self.viewer_frame = tk.Frame(root, width=width - 4 * Viewer.PAD,
                                      height=int(height * 0.9), bd=2,
                                      relief=tk.SUNKEN)
         self.viewer_frame.grid(row=1, column=0, sticky=tk.W,
