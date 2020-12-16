@@ -1,6 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-import os
+from widgets.FavoritesView import FavoritesView
 
 
 class View:
@@ -24,7 +24,7 @@ class NavBar:
         self.controller = controller
         self.navbar_frame = tk.Frame(root, width=width, height=0.05 * height)
         self.navbar_frame.grid(row=0, column=0, sticky=tk.W,
-                               padx=NavBar.MARGIN_X)
+                               ipadx=NavBar.MARGIN_X)
         self.home_btn = tk.Button(self.navbar_frame, text="Home")
         self.home_btn.pack(side=tk.LEFT, padx=NavBar.MARGIN_X,
                            pady=NavBar.MARGIN_Y)
@@ -45,13 +45,24 @@ class NavBar:
 
 
 class Viewer:
-    PAD = 10
+    PAD = 3
+    MARGIN_X = 5
+    MARGIN_Y = 10
 
     def __init__(self, root, controller, width, height):
         self.controller = controller
-        self.viewer_tree = ttk.Treeview(root)
+        self.viewer_frame = tk.Frame(root, width=int(0.8 * width),
+                                     height=int(height * 0.9), bd=2,
+                                     relief=tk.SUNKEN)
+        self.viewer_frame.grid(row=1, column=0, sticky=tk.W,
+                               padx=Viewer.MARGIN_X)
+        self.viewer_frame.grid_propagate(0)
 
-        self.viewer_tree["columns"] = ("one", "two", "three","four")
+        self.favorites_view = FavoritesView(self.viewer_frame, controller,
+                                            height, width)
+        self.viewer_tree = ttk.Treeview(self.viewer_frame, height=25)
+
+        self.viewer_tree["columns"] = ("one", "two", "three", "four")
         self.viewer_tree["show"] = "headings"
         self.viewer_tree.column("one", width=200, minwidth=170, stretch=tk.NO)
         self.viewer_tree.column("two", width=150, minwidth=120, stretch=tk.NO)
@@ -64,7 +75,8 @@ class Viewer:
         self.viewer_tree.heading("four", text="Size", anchor=tk.W)
 
         self.viewer_tree.bind("<Double-1>", controller.on_double_click)
-        self.viewer_tree.grid(row=1, column=0, padx=Viewer.PAD, sticky="nsew")
+        self.viewer_tree.grid(row=0, column=1, padx=Viewer.MARGIN_X,
+                              pady=Viewer.MARGIN_Y, sticky="nsew")
 
     def show_folders_and_files(self, folder_details, file_details):
         idx = 1
