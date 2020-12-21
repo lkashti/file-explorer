@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from widgets.FavoritesView import FavoritesView
+from widgets.SelectView import SelectView
 
 
 class View:
@@ -73,6 +74,8 @@ class Viewer:
 
         self.favorites_view = FavoritesView(self.viewer_frame, controller,
                                             height, width)
+        self.select_view = SelectView(self.viewer_frame, controller, height,
+                                      width)
         self.viewer_tree = ttk.Treeview(self.viewer_frame, height=25)
 
         self.viewer_tree["columns"] = ("one", "two", "three", "four")
@@ -88,7 +91,7 @@ class Viewer:
         self.viewer_tree.heading("four", text="Size", anchor=tk.W)
 
         self.viewer_tree.bind("<Double-1>", controller.on_double_click)
-        self.viewer_tree.grid(row=0, column=1, padx=Viewer.MARGIN_X,
+        self.viewer_tree.grid(row=0, column=1, rowspan=2, padx=Viewer.MARGIN_X,
                               pady=Viewer.MARGIN_Y, sticky="nsew")
 
     def show_folders_and_files(self, folder_details, file_details):
