@@ -2,6 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from widgets.FavoritesView import FavoritesView
 from widgets.SelectView import SelectView
+from widgets.StatusBarView import StatusBarView
 
 
 class View:
@@ -14,6 +15,9 @@ class View:
         self.controller = controller
         self.navbar = NavBar(master, controller, self.width, self.height)
         self.viewer = Viewer(master, controller, self.width, self.height)
+        self.status_bar = StatusBarView(master, controller, self.width,
+                                        self.height)
+
 
 
 class NavBar:
@@ -66,7 +70,7 @@ class Viewer:
     def __init__(self, root, controller, width, height):
         self.controller = controller
         self.viewer_frame = tk.Frame(root, width=width - 4 * Viewer.PAD,
-                                     height=int(height * 0.9), bd=2,
+                                     height=int(height * 0.8), bd=2,
                                      relief=tk.SUNKEN)
         self.viewer_frame.grid(row=1, column=0, sticky=tk.W,
                                padx=Viewer.MARGIN_X)
