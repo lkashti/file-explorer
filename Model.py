@@ -14,7 +14,8 @@ class SizeUnit(enum.Enum):
 
 class Model:
     def __init__(self):
-        self.nav_stack = NavigationStack()
+        self.back_stack = NavigationStack()
+        self.forward_stack = NavigationStack()
 
     @staticmethod
     def get_home_path():
