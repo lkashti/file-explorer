@@ -11,9 +11,11 @@ class Controller:
         # Pass to view links on root frame and controller object
         self.view = View(self.root, self)
         self.root.deiconify()
+        self.vv = 0
         # initialization
         self.update_all_views(self.model.get_home_path())
         self.root.mainloop()
+
 
     def handle_home_event(self, event):
         # event.widget# Pass data to view

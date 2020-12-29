@@ -38,15 +38,15 @@ class Model:
         dir_names = [item for item in contents if os.path.isdir(item)]
         file_names = [item for item in contents if os.path.isfile(item)]
         dir_details = [(dir_name,
-                        time.strftime('%m/%d/%Y', time.gmtime(
-                            os.path.getmtime(dir_name))),
+                        # time.strftime('%m/%d/%Y', time.gmtime(
+                        #     os.path.getmtime(dir_name))),
                         "File Folder",
                         "")
                        for dir_name in dir_names]
         file_details = [(file_name,
                          # time last modified
-                         time.strftime('%m/%d/%Y', time.gmtime(
-                             os.path.getmtime(file_name))),
+                         # time.strftime('%m/%d/%Y', time.gmtime(
+                         #     os.path.getmtime(file_name))),
                          # extension
                          os.path.splitext(file_name)[1].upper() + " File",
                          # size
