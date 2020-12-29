@@ -1,5 +1,5 @@
 import tkinter as tk
-import widgets.TreeView as tv
+import tkinter.ttk as ttk
 
 class SelectView:
     PAD = 3
@@ -8,36 +8,19 @@ class SelectView:
 
     def __init__(self, root, controller):
         self.controller = controller
-
         self.frame = tk.Frame(root)
-
-        self.select_label = tk.Label(self.frame, text="Select",
-                                     font="Arial 15 bold")
-        self.select_label.pack()
-
-        self.v = tk.IntVar()
-        self.v.set(0)
-        self.values = {"All": 0,
-                       "None": 1,
-                       "Costume": 2,
-                       }
-        for index, btn in enumerate(self.values):
-            b = tk.Radiobutton(self.frame,
-                               text=btn,
-                               value=index,
-                               variable=self.v,command=self.get_val)
-            b.pack(side=tk.LEFT)
-        # self.rb_all = tk.Radiobutton(self.frame,text="all",value=1,variable=self.v).pack(side=tk.LEFT)
-        # self.rb_none = tk.Radiobutton(self.frame,text="none",value=2,variable=self.v).pack(side=tk.LEFT)
-        # self.rb_costume = tk.Radiobutton(self.frame,text="costume",value=3,variable=self.v).pack(side=tk.LEFT)
+        self.select_label = tk.Label(self.frame, text="Select Items",
+                                     font="Arial 12 bold")
+        self.select_label.pack(side=tk.LEFT)
+        self.all_var = tk.IntVar()
+        self.none_var = tk.IntVar()
+        self.all_checkbox = tk.Checkbutton(self.frame,text="All",font="Arial 10",variable=self.all_var)
+        self.none_checkbox = tk.Checkbutton(self.frame, text="None",font="Arial 10",variable=self.none_var)
+        self.all_checkbox.pack(side=tk.LEFT, padx=(10, 4))
+        self.none_checkbox.pack(side=tk.LEFT, padx=(4, 4))
+        self.all_checkbox.bind("<Button-1>", controller.print_all_selected)
+        self.none_checkbox.bind("<Button-1>", controller.print_none_selected)
         self.frame.grid(row=2, column=0,
                         sticky=tk.NSEW,
                         padx=SelectView.MARGIN_X,
                         pady=SelectView.MARGIN_Y)
-
-
-    def get_val(self):
-        self.controller.vv = self.v.get()
-        # val = self.v.get()
-        # return val
-

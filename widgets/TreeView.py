@@ -18,8 +18,5 @@ class TreeView:
         self.tree.heading("three", text="Type", anchor=tk.W)
         self.tree.heading("four", text="Size", anchor=tk.W)
         self.tree.bind("<Double-1>", controller.on_double_click)
+        # self.tree.bind("<<TreeviewSelect>>", controller.on_click)
         self.tree.pack()
-
-    # def selected(self):
-    #     curItem = self.tree.focus()
-    #     print(self.tree.item(curItem))

@@ -3,6 +3,7 @@ from widgets.FavoritesView import FavoritesView
 from widgets.SelectView import SelectView
 from widgets.StatusBarView import StatusBarView
 from widgets.TreeView import TreeView
+from widgets.ButtonsView import ButtonsView
 import tkinter.ttk as ttk
 
 
@@ -12,8 +13,8 @@ class View:
         root.title("File Explorer")
         self.width = 1092
         self.height = 614
-        self.horizon_offset = root.winfo_screenwidth() // 4
-        self.vertical_offset = root.winfo_screenheight() // 4
+        self.horizon_offset = 100
+        self.vertical_offset = 50
         root.geometry(
             "{}x{}+{}+{}".format(self.width, self.height,
                                  self.horizon_offset, self.vertical_offset))
@@ -40,13 +41,11 @@ class NavBar:
         self.navbar_frame.grid(row=0, column=0, sticky="ew",
                                ipady=NavBar.MARGIN_Y, ipadx=NavBar.PAD)
 
-        self.home_btn = tk.Button(self.navbar_frame, text="Home")
+        self.home_btn = tk.Button(self.navbar_frame, text="Home",font="Arial 9")
         self.home_btn.pack(side=tk.LEFT, padx=NavBar.MARGIN_X)
-
-        self.back_btn = tk.Button(self.navbar_frame, text="Back")
+        self.back_btn = tk.Button(self.navbar_frame, text="Back",font="Arial 9")
         self.back_btn.pack(side=tk.LEFT, padx=NavBar.MARGIN_X)
-
-        self.forward_btn = tk.Button(self.navbar_frame, text="Forward")
+        self.forward_btn = tk.Button(self.navbar_frame, text="Forward",font="Arial 9")
         self.forward_btn.pack(side=tk.LEFT, padx=NavBar.MARGIN_X)
 
         self.path_field = tk.Entry(self.navbar_frame, width=int(0.1 * width))
@@ -87,13 +86,14 @@ class CenterFrame:
         self.right_frame.frame.grid(row=0, column=1, sticky="nsew")
 
         # LEFT
-
         self.left_frame = tk.Frame(self.center_frame)
         self.left_frame.grid(row=0, column=0, sticky="nsew")
         ttk.Separator(self.left_frame, orient=tk.HORIZONTAL).grid(row=1,
                                                                   ipadx=120)
         self.favorites_view = FavoritesView(self.left_frame, controller)
         self.select_view = SelectView(self.left_frame, controller)
+        self.buttons_view = ButtonsView(self.left_frame, controller)
+
 
     def show_folders_and_files(self, folder_details, file_details):
         idx = 1
