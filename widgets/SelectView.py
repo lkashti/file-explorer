@@ -1,5 +1,4 @@
 import tkinter as tk
-import tkinter.ttk as ttk
 
 
 class SelectView:
@@ -7,22 +6,28 @@ class SelectView:
     MARGIN_X = 5
     MARGIN_Y = 10
 
-    def __init__(self, root, controller, height, width):
+    def __init__(self, root, controller):
         self.controller = controller
 
-        self.frame = tk.Frame(root, bd=1,
-                              relief=tk.SUNKEN)
-        self.frame.grid(row=1, column=0, sticky="nsew",
-                        padx=SelectView.MARGIN_X,
-                        pady=SelectView.MARGIN_Y)
-        self.frame.grid_propagate(0)
+        self.frame = tk.Frame(root)
 
         self.select_label = tk.Label(self.frame, text="Select",
                                      font="Arial 15 bold")
         self.select_label.pack()
 
-        self.select_checkbox = tk.Checkbutton(self.frame, width=35)
-        self.select_checkbox.pack()
-
-        self.select_combobox = ttk.Combobox(self.frame, width=30)
-        self.select_combobox.pack()
+        self.v = tk.IntVar()
+        self.v.set(1)
+        self.values = {"All": 1,
+                       "None": 2,
+                       "Custom": 3,
+                       }
+        for index, btn in enumerate(self.values):
+            b = tk.Radiobutton(self.frame,
+                               text=btn,
+                               value=index,
+                               variable=self.v)
+            b.pack(side=tk.LEFT)
+        self.frame.grid(row=2, column=0,
+                        sticky=tk.NSEW,
+                        padx=SelectView.MARGIN_X,
+                        pady=SelectView.MARGIN_Y)

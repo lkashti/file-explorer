@@ -28,8 +28,9 @@ class Controller:
     def on_double_click(self, event):
         # get selected item
         try:
-            item = self.view.viewer.viewer_tree.selection()[0]
-            item_text = self.view.viewer.viewer_tree.item(item, "text")
+            item = self.view.center_frame.right_frame.tree.selection()[0]
+            item_text = self.view.center_frame.right_frame.tree.item(item,
+                                                                     "text")
         except IndexError:
 
             return
@@ -41,9 +42,11 @@ class Controller:
             self.update_all_views(new_path)
 
     def update_treeview(self, path):
-        self.view.viewer.viewer_tree.delete(*self.view.viewer.viewer_tree.get_children())
+        self.view.center_frame.right_frame.tree.delete(
+            *self.view.center_frame.right_frame.tree.get_children())
         folder_details, file_details = self.model.get_content_from_path(path)
-        self.view.viewer.show_folders_and_files(folder_details, file_details)
+        self.view.center_frame.show_folders_and_files(folder_details,
+                                                      file_details)
 
     def update_all_views(self, path):
         print(path)

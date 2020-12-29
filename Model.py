@@ -50,7 +50,7 @@ class Model:
                          # extension
                          os.path.splitext(file_name)[1].upper() + " File",
                          # size
-                         "{}KB".format(
+                         "{} KB".format(
                              int(Model.get_file_size(file_name, SizeUnit.KB))))
                         for file_name in file_names]
 

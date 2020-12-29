@@ -6,11 +6,10 @@ class FavoritesView:
     MARGIN_X = 5
     MARGIN_Y = 10
 
-    def __init__(self, root, controller, height, width):
+    def __init__(self, root, controller):
         self.controller = controller
 
-        self.frame = tk.Frame(root, bd=1,
-                              relief=tk.SUNKEN)
+        self.frame = tk.Frame(root)
         self.frame.grid(row=0, column=0, sticky="nsew",
                         padx=FavoritesView.MARGIN_X,
                         pady=FavoritesView.MARGIN_Y)
