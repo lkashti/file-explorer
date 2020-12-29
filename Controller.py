@@ -75,6 +75,7 @@ class Controller:
     def update_all_views(self, path):
         self.update_treeview(path)
         self.view.navbar.path.set(path)
+        self.view.status_bar.load_item_count(path)
 
 
 if __name__ == '__main__':

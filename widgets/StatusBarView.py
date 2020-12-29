@@ -7,21 +7,31 @@ class StatusBarView:
 
     def __init__(self, root, controller):
         self.controller = controller
-        self.frame = tk.Frame(root,bg="lavender")
+        self.frame = tk.Frame(root)
         self.frame.grid(row=2, column=0, sticky="ew",
-                        padx=StatusBarView.PADX,ipady=StatusBarView.PADY)
+                        ipadx=StatusBarView.PADX, ipady=StatusBarView.PADY)
 
-        self.bottom_bar_label1 = tk.Label(self.frame, text="Status Bar")
-        self.bottom_bar_label2 = tk.Label(self.frame, text="Folder Name:")
-        self.bottom_bar_label3 = tk.Label(self.frame, text="Items:")
-        self.folder_name_label = tk.Label(self.frame, text="My_Shits")
-        self.items_label = tk.Label(self.frame, text="12")
+        self.item_count: tk.IntVar = tk.IntVar()
+        self.load_item_count(controller.model.get_home_path())
+        self.item_count_label = tk.Label(self.frame,
+                                         textvariable=self.item_count)
+        self.items_label = tk.Label(self.frame, text="items")
 
+        # self.selected_item_count = tk.IntVar()
+        # self.selected_items_count_label = tk.Label(
+        #     self.frame,
+        #     textvariable=self.selected_item_count
+        # )
+        # self.selected_items_label = tk.Label(self.frame, text="items selected")
         # layout the widgets in the btm frame
-        self.bottom_bar_label1.pack(side=tk.LEFT, padx=StatusBarView.PADX)
-        self.bottom_bar_label2.pack(side=tk.LEFT, padx=(
-            StatusBarView.PADX * 57, StatusBarView.PADX))
-        self.folder_name_label.pack(side=tk.LEFT, padx=StatusBarView.PADX)
-        self.bottom_bar_label3.pack(side=tk.LEFT, padx=(
-            StatusBarView.PADX * 25, StatusBarView.PADX))
-        self.items_label.pack(side=tk.LEFT, padx=StatusBarView.PADX)
+        self.item_count_label.pack(side=tk.LEFT, padx=(StatusBarView.PADX, 0))
+        self.items_label.pack(side=tk.LEFT, padx=(0, StatusBarView.PADX))
+
+        # self.selected_items_count_label.pack(side=tk.LEFT,
+        #                                      padx=StatusBarView.PADX)
+        # self.selected_items_label.pack(side=tk.LEFT, padx=StatusBarView.PADX)
+
+    def load_item_count(self, path):
+        self.item_count.set(
+            self.controller.model.get_folder_file_count(path)
+        )
