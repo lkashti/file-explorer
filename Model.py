@@ -22,6 +22,10 @@ class Model:
         return os.path.expanduser("~")
 
     @staticmethod
+    def get_folder_file_count(path):
+        return len(os.listdir(path))
+
+    @staticmethod
     def get_folders_contents(path):
         os.chdir(path)
         contents = os.listdir(path)
