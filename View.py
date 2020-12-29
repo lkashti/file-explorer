@@ -66,8 +66,10 @@ class NavBar:
         self.search_field.bind("<FocusOut>",
                                lambda e: self.search_text.set("Search..."))
 
-        self.home_btn.bind("<Button>", controller.handle_home_event)
-        self.back_btn.bind("<Button>", controller.handle_back_event)
+        self.home_btn.bind("<ButtonRelease>", controller.handle_home_event)
+        self.back_btn.bind("<ButtonRelease>", controller.handle_back_event)
+        self.forward_btn.bind("<ButtonRelease>",
+                              controller.handle_forward_event)
 
 
 class CenterFrame:
@@ -77,8 +79,8 @@ class CenterFrame:
 
     def __init__(self, root, controller):
         self.controller = controller
-        self.center_frame = tk.Frame(root,bd=1,relief=tk.SUNKEN)
-        self.center_frame.grid(row=1, column=0, sticky="nsew")         
+        self.center_frame = tk.Frame(root, bd=1, relief=tk.SUNKEN)
+        self.center_frame.grid(row=1, column=0, sticky="nsew")
         self.center_frame.grid_rowconfigure(0, weight=1)
         self.center_frame.grid_columnconfigure(1, weight=1)
 

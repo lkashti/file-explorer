@@ -18,12 +18,19 @@ class Controller:
     def handle_home_event(self, event):
         # event.widget# Pass data to view
         if self.view.navbar.path.get() != self.model.get_home_path():
-            self.model.nav_stack.push(os.getcwd())
+            self.model.back_stack.push(os.getcwd())
+            self.model.forward_stack.clear_stack()
             self.update_all_views(self.model.get_home_path())
 
     def handle_back_event(self, event):
-        if len(self.model.nav_stack.stack) > 0:
-            self.update_all_views(self.model.nav_stack.pop())
+        if len(self.model.back_stack.stack) > 0:
+            self.model.forward_stack.push(os.getcwd())
+            self.update_all_views(self.model.back_stack.pop())
+
+    def handle_forward_event(self, event):
+        if len(self.model.forward_stack.stack) > 0:
+            self.model.back_stack.push(os.getcwd())
+            self.update_all_views(self.model.forward_stack.pop())
 
     def on_double_click(self, event):
         # get selected item
@@ -37,8 +44,8 @@ class Controller:
         # clear tree before update
         if os.path.isdir(item_text):
             new_path = os.path.join(self.view.navbar.path.get(), item_text)
-            self.model.nav_stack.push(self.view.navbar.path.get())
-            print(self.model.nav_stack.stack)
+            self.model.back_stack.push(self.view.navbar.path.get())
+            self.model.forward_stack.clear_stack()
             self.update_all_views(new_path)
 
     def update_treeview(self, path):
@@ -49,7 +56,6 @@ class Controller:
                                                       file_details)
 
     def update_all_views(self, path):
-        print(path)
         self.update_treeview(path)
         self.view.navbar.path.set(path)
 
