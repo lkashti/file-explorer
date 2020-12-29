@@ -1,11 +1,10 @@
-import tkinter as tk
 from widgets.FavoritesView import FavoritesView
 from widgets.SelectView import SelectView
 from widgets.StatusBarView import StatusBarView
 from widgets.TreeView import TreeView
 from widgets.ButtonsView import ButtonsView
 import tkinter.ttk as ttk
-
+import tkinter as tk
 
 class View:
     def __init__(self, root: tk.Tk, controller):
@@ -89,6 +88,10 @@ class CenterFrame:
         self.left_frame = tk.Frame(self.center_frame)
         self.left_frame.grid(row=0, column=0, sticky="nsew")
         ttk.Separator(self.left_frame, orient=tk.HORIZONTAL).grid(row=1,
+                                                                  ipadx=120)
+        ttk.Separator(self.left_frame, orient=tk.HORIZONTAL).grid(row=3,
+                                                                  ipadx=120)
+        ttk.Separator(self.left_frame, orient=tk.HORIZONTAL).grid(row=5,
                                                                   ipadx=120)
         self.favorites_view = FavoritesView(self.left_frame, controller)
         self.select_view = SelectView(self.left_frame, controller)

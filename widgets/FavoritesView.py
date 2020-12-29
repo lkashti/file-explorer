@@ -10,12 +10,12 @@ class FavoritesView:
         self.controller = controller
 
         self.frame = tk.Frame(root)
-        self.frame.grid(row=0, column=0, sticky="nsew",
+        self.frame.grid(row=4, column=0, sticky="nsew",
                         padx=FavoritesView.MARGIN_X,
                         pady=FavoritesView.MARGIN_Y)
 
         self.label = tk.Label(self.frame, text="Favorites",
-                              font="Arial 15 bold")
+                              font="Arial 12 bold",anchor="w",padx=FavoritesView.MARGIN_X)
         self.label.pack(fill=tk.X)
 
         self.scrollbar = tk.Scrollbar(self.frame, orient=tk.VERTICAL)
