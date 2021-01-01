@@ -6,6 +6,7 @@ from widgets.ButtonsView import ButtonsView
 import tkinter.ttk as ttk
 import tkinter as tk
 
+
 class View:
     def __init__(self, root: tk.Tk, controller):
         self.controller = controller
@@ -40,11 +41,11 @@ class NavBar:
         self.navbar_frame.grid(row=0, column=0, sticky="ew",
                                ipady=NavBar.MARGIN_Y, ipadx=NavBar.PAD)
 
-        self.home_btn = tk.Button(self.navbar_frame, text="Home",font="Arial 9")
+        self.home_btn = tk.Button(self.navbar_frame, text="Home", font="Arial 9")
         self.home_btn.pack(side=tk.LEFT, padx=NavBar.MARGIN_X)
-        self.back_btn = tk.Button(self.navbar_frame, text="Back",font="Arial 9")
+        self.back_btn = tk.Button(self.navbar_frame, text="Back", font="Arial 9")
         self.back_btn.pack(side=tk.LEFT, padx=NavBar.MARGIN_X)
-        self.forward_btn = tk.Button(self.navbar_frame, text="Forward",font="Arial 9")
+        self.forward_btn = tk.Button(self.navbar_frame, text="Forward", font="Arial 9")
         self.forward_btn.pack(side=tk.LEFT, padx=NavBar.MARGIN_X)
 
         self.path_field = tk.Entry(self.navbar_frame, width=int(0.1 * width))
@@ -98,7 +99,6 @@ class CenterFrame:
         self.favorites_view = FavoritesView(self.left_frame, controller)
         self.select_view = SelectView(self.left_frame, controller)
         self.buttons_view = ButtonsView(self.left_frame, controller)
-
 
     def show_folders_and_files(self, folder_details, file_details):
         idx = 1

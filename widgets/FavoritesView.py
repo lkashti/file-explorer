@@ -15,7 +15,7 @@ class FavoritesView:
                         pady=FavoritesView.MARGIN_Y)
 
         self.label = tk.Label(self.frame, text="Favorites",
-                              font="Arial 12 bold",anchor="w",padx=FavoritesView.MARGIN_X)
+                              font="Arial 12 bold", anchor="w", padx=FavoritesView.MARGIN_X)
         self.label.pack(fill=tk.X)
 
         self.scrollbar = tk.Scrollbar(self.frame, orient=tk.VERTICAL)

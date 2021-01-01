@@ -23,7 +23,11 @@ class Model:
 
     @staticmethod
     def get_folder_file_count(path):
-        return len(os.listdir(path))
+        try:
+            num = len(os.listdir(path))
+        except PermissionError or TypeError:
+            num = 0
+        return num
 
     @staticmethod
     def get_folders_contents(path):

@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
+
 class SelectView:
     PAD = 3
     MARGIN_X = 5
@@ -14,8 +15,8 @@ class SelectView:
         self.select_label.pack(side=tk.LEFT)
         self.all_var = tk.IntVar()
         self.none_var = tk.IntVar()
-        self.all_checkbox = tk.Checkbutton(self.frame,text="All",font="Arial 10",variable=self.all_var)
-        self.none_checkbox = tk.Checkbutton(self.frame, text="None",font="Arial 10",variable=self.none_var)
+        self.all_checkbox = tk.Checkbutton(self.frame, text="All", font="Arial 10", variable=self.all_var)
+        self.none_checkbox = tk.Checkbutton(self.frame, text="None", font="Arial 10", variable=self.none_var)
         self.all_checkbox.pack(side=tk.LEFT, padx=(10, 4))
         self.none_checkbox.pack(side=tk.LEFT, padx=(4, 4))
         self.all_checkbox.bind("<Button-1>", controller.print_all_selected)

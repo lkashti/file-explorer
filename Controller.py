@@ -15,22 +15,20 @@ class Controller:
         self.update_all_views(self.model.get_home_path())
         self.root.mainloop()
 
-
-    def print_all_selected(self, event):
-        if (self.view.center_frame.select_view.all_var.get() == 0):
-            self.view.center_frame.right_frame.tree.selection_set(self.view.center_frame.right_frame.tree.get_children())
+    def print_all_selected(self):
+        if self.view.center_frame.select_view.all_var.get() == 0:
+            self.view.center_frame.right_frame.tree.selection_set(
+                self.view.center_frame.right_frame.tree.get_children())
             self.view.center_frame.select_view.none_checkbox.config(state=tk.DISABLED)
-        if (self.view.center_frame.select_view.all_var.get() == 1):
+        if self.view.center_frame.select_view.all_var.get() == 1:
             self.view.center_frame.select_view.none_checkbox.config(state=tk.NORMAL)
 
-
-    def print_none_selected(self, event):
-        if (self.view.center_frame.select_view.none_var.get() == 0):
+    def print_none_selected(self):
+        if self.view.center_frame.select_view.none_var.get() == 0:
             self.view.center_frame.right_frame.tree.selection_set()
             self.view.center_frame.select_view.all_checkbox.config(state=tk.DISABLED)
-        if (self.view.center_frame.select_view.none_var.get() == 1):
+        if self.view.center_frame.select_view.none_var.get() == 1:
             self.view.center_frame.select_view.all_checkbox.config(state=tk.NORMAL)
-
 
     def handle_home_event(self, event):
         # event.widget# Pass data to view

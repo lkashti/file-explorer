@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
+
 class ButtonsView:
     PAD = 3
     MARGIN_X = 5
@@ -10,7 +11,8 @@ class ButtonsView:
         self.controller = controller
         self.frame = tk.Frame(root)
         self.label = tk.Label(self.frame, text="Options",
-                              font="Arial 12 bold", anchor="w", padx=ButtonsView.MARGIN_X, pady=ButtonsView.MARGIN_X*2)
+                              font="Arial 12 bold", anchor="w", padx=ButtonsView.MARGIN_X,
+                              pady=ButtonsView.MARGIN_X * 2)
         self.label.pack(fill=tk.X)
         self.copy_btn = tk.Button(self.frame, text="Copy", font="Arial 9")
         # self.copy_btn.grid(row=0, column=0, padx=5)
@@ -29,4 +31,4 @@ class ButtonsView:
         # self.none_checkbox.bind("<Button-1>", controller.print_none_selected)
         self.frame.grid(row=2, column=0,
                         sticky=tk.NSEW,
-                        padx=ButtonsView.MARGIN_X,pady=ButtonsView.MARGIN_Y)
+                        padx=ButtonsView.MARGIN_X, pady=ButtonsView.MARGIN_Y)
