@@ -33,6 +33,13 @@ class Controller:
     def add_to_favorites(self, event):
         self.view.center_frame.favorites_lb_view.listbox.insert("end", " ⭐ " + self.view.navbar.path.get())
 
+    def rmv_to_favorites(self, event):
+        listbox_len = self.view.center_frame.favorites_lb_view.listbox.size() - 1
+        self.view.center_frame.favorites_lb_view.listbox.delete(listbox_len)
+
+    def show_hidden_files(self, event):
+        print("asdasd")
+
     def handle_home_event(self, event):
         # event.widget# Pass data to view
         if self.view.navbar.path.get() != self.model.get_home_path():

@@ -19,5 +19,5 @@ class FavoritesView:
         self.add_btn.bind("<Button-1>", controller.add_to_favorites)
         self.add_btn.grid(row=0, column=1, padx=(FavoritesView.PAD, FavoritesView.PAD))
         self.rmv_btn = tk.Button(self.frame, text="▬", font="Arial 9")
-        self.rmv_btn.bind("<Button-1>", controller.add_to_favorites)
+        self.rmv_btn.bind("<Button-1>", controller.rmv_to_favorites)
         self.rmv_btn.grid(row=0, column=2, padx=(FavoritesView.PAD, FavoritesView.PAD))
