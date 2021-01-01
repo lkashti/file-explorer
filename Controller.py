@@ -30,6 +30,9 @@ class Controller:
         if self.view.center_frame.select_view.none_var.get() == 1:
             self.view.center_frame.select_view.all_checkbox.config(state=tk.NORMAL)
 
+    def add_to_favorites(self, event):
+        self.view.center_frame.favorites_lb_view.listbox.insert("end", " ⭐ " + self.view.navbar.path.get())
+
     def handle_home_event(self, event):
         # event.widget# Pass data to view
         if self.view.navbar.path.get() != self.model.get_home_path():
@@ -54,7 +57,6 @@ class Controller:
             item_text = self.view.center_frame.right_frame.tree.item(item,
                                                                      "text")
         except IndexError:
-
             return
         # clear tree before update
         if os.path.isdir(item_text):
@@ -69,6 +71,14 @@ class Controller:
         folder_details, file_details = self.model.get_content_from_path(path)
         self.view.center_frame.show_folders_and_files(folder_details,
                                                       file_details)
+
+    def on_click_list(self, new_path):
+        print(new_path)
+        if os.path.isdir(new_path):
+            self.model.back_stack.push(self.view.navbar.path.get())
+            self.model.forward_stack.clear_stack()
+            print(os.path.normpath(new_path))
+            self.update_all_views(new_path)
 
     def update_all_views(self, path):
         self.update_treeview(path)

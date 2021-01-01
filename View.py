@@ -1,4 +1,5 @@
-from widgets.FavoritesView import FavoritesView
+from widgets.FavoritesBarView import FavoritesView
+from widgets.FavoritesListBoxView import ListBox
 from widgets.SelectView import SelectView
 from widgets.StatusBarView import StatusBarView
 from widgets.TreeView import TreeView
@@ -94,9 +95,10 @@ class CenterFrame:
                                                                   ipadx=120)
         ttk.Separator(self.left_frame, orient=tk.HORIZONTAL).grid(row=3,
                                                                   ipadx=120)
-        ttk.Separator(self.left_frame, orient=tk.HORIZONTAL).grid(row=5,
+        ttk.Separator(self.left_frame, orient=tk.HORIZONTAL).grid(row=6,
                                                                   ipadx=120)
         self.favorites_view = FavoritesView(self.left_frame, controller)
+        self.favorites_lb_view = ListBox(self.left_frame, controller)
         self.select_view = SelectView(self.left_frame, controller)
         self.buttons_view = ButtonsView(self.left_frame, controller)
 

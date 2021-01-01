@@ -40,6 +40,7 @@ class Model:
     @staticmethod
     def get_content_from_path(path):
         try:
+            print("get cont. ", path)
             os.chdir(path)
             contents = os.listdir(path)
         except PermissionError or TypeError:
