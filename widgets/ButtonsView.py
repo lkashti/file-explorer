@@ -14,7 +14,8 @@ class ButtonsView:
         self.label.pack(fill=tk.X)
         self.copy_btn = tk.Button(self.frame, text="Copy", font="Arial 9")
         # self.copy_btn.grid(row=0, column=0, padx=5)
-        self.copy_btn.pack(side=tk.LEFT, padx=(ButtonsView.MARGIN_X*2, ButtonsView.MARGIN_X))
+
+        self.copy_btn.pack(side=tk.LEFT, padx=(ButtonsView.MARGIN_X, ButtonsView.MARGIN_X))
         self.paste_btn = tk.Button(self.frame, text="Paste", font="Arial 9")
         # self.paste_btn.grid(row=0,column=1, padx=5)
         self.paste_btn.pack(side=tk.LEFT, padx=(ButtonsView.MARGIN_X, ButtonsView.MARGIN_X))
