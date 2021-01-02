@@ -1,9 +1,9 @@
-from widgets.FavoritesBarView import FavoritesView
-from widgets.FavoritesListBoxView import ListBox
-from widgets.SelectView import SelectView
-from widgets.StatusBarView import StatusBarView
-from widgets.TreeView import TreeView
-from widgets.ButtonsView import ButtonsView
+from widgets.favorites_bar_view import FavoritesView
+from widgets.favorites_listbox_view import ListBox
+from widgets.select_view import SelectView
+from widgets.status_bar_view import StatusBarView
+from widgets.tree_view import TreeView
+from widgets.buttons_view import ButtonsView
 import tkinter.ttk as ttk
 import tkinter as tk
 

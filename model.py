@@ -1,7 +1,7 @@
 import os
 import time
 import enum
-from utils.NavigationStack import NavigationStack
+from utils.navigation_stack import NavigationStack
 
 
 # Enum for size units
