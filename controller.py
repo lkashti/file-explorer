@@ -15,7 +15,7 @@ class Controller:
         self.update_all_views(self.model.get_home_path())
         self.root.mainloop()
 
-    def print_all_selected(self):
+    def print_all_selected(self, event):
         if self.view.center_frame.select_view.all_var.get() == 0:
             self.view.center_frame.right_frame.tree.selection_set(
                 self.view.center_frame.right_frame.tree.get_children())
@@ -23,7 +23,7 @@ class Controller:
         if self.view.center_frame.select_view.all_var.get() == 1:
             self.view.center_frame.select_view.none_checkbox.config(state=tk.NORMAL)
 
-    def print_none_selected(self):
+    def print_none_selected(self, event):
         if self.view.center_frame.select_view.none_var.get() == 0:
             self.view.center_frame.right_frame.tree.selection_set()
             self.view.center_frame.select_view.all_checkbox.config(state=tk.DISABLED)
@@ -71,11 +71,13 @@ class Controller:
             self.model.back_stack.push(self.view.navbar.path.get())
             self.model.forward_stack.clear_stack()
             self.update_all_views(new_path)
+            self.view.status_bar.item_label.config(text="None")
 
     def on_tree_select(self, event):
         index = self.view.center_frame.right_frame.tree.focus()
         line_tup = self.view.center_frame.right_frame.tree.item(index)
         self.view.center_frame.buttons_view.file_name = line_tup['text']
+        self.view.status_bar.item_label.config(text=line_tup['text'])
 
     def update_treeview(self, path):
         self.view.center_frame.right_frame.tree.delete(
@@ -89,7 +91,6 @@ class Controller:
         if os.path.isdir(new_path):
             self.model.back_stack.push(self.view.navbar.path.get())
             self.model.forward_stack.clear_stack()
-            print(os.path.normpath(new_path))
             self.update_all_views(new_path)
 
     def update_all_views(self, path):

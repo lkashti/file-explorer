@@ -11,25 +11,18 @@ class StatusBarView:
         self.frame.grid(row=2, column=0, sticky="ew",
                         ipadx=StatusBarView.PADX, ipady=StatusBarView.PADY)
 
+        self.selected_label = tk.Label(self.frame, text="Selected item:")
+        self.item_label = tk.Label(self.frame, text="None")
         self.item_count: tk.IntVar = tk.IntVar()
         self.load_item_count(controller.model.get_home_path())
         self.item_count_label = tk.Label(self.frame,
                                          textvariable=self.item_count)
-        self.items_label = tk.Label(self.frame, text="items")
+        self.items_label = tk.Label(self.frame, text="Items:")
+        self.items_label.pack(side=tk.LEFT, padx=(StatusBarView.PADX*68, StatusBarView.PADX))
+        self.item_count_label.pack(side=tk.LEFT)
+        self.selected_label.pack(side=tk.LEFT, padx=(StatusBarView.PADX*20, StatusBarView.PADX))
+        self.item_label.pack(side=tk.LEFT)
 
-        # self.selected_item_count = tk.IntVar()
-        # self.selected_items_count_label = tk.Label(
-        #     self.frame,
-        #     textvariable=self.selected_item_count
-        # )
-        # self.selected_items_label = tk.Label(self.frame, text="items selected")
-        # layout the widgets in the btm frame
-        self.item_count_label.pack(side=tk.LEFT, padx=(StatusBarView.PADX, 0))
-        self.items_label.pack(side=tk.LEFT, padx=(0, StatusBarView.PADX))
-
-        # self.selected_items_count_label.pack(side=tk.LEFT,
-        #                                      padx=StatusBarView.PADX)
-        # self.selected_items_label.pack(side=tk.LEFT, padx=StatusBarView.PADX)
 
     def load_item_count(self, path):
         self.item_count.set(
