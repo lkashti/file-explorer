@@ -114,3 +114,4 @@ class CenterFrame:
                                          text=file_detail[0],
                                          values=file_detail[0:])
             idx += 1
+

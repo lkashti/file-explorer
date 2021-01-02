@@ -2,6 +2,7 @@ import os
 import time
 import enum
 from utils.navigation_stack import NavigationStack
+from utils.favorites import FavoritesHandler
 
 
 # Enum for size units
@@ -16,6 +17,7 @@ class Model:
     def __init__(self):
         self.back_stack = NavigationStack()
         self.forward_stack = NavigationStack()
+        self.favorites = FavoritesHandler()
 
     @staticmethod
     def get_home_path():
@@ -30,22 +32,17 @@ class Model:
         return num
 
     @staticmethod
-    def get_folders_contents(path):
-        os.chdir(path)
-        contents = os.listdir(path)
-        dirs = [item for item in contents if os.path.isdir(item)]
-        files = [item for item in contents if os.path.isfile(item)]
-        return dirs, files
-
-    @staticmethod
     def get_content_from_path(path):
         try:
-            os.chdir(path)
+            # orig_path = os.getcwd()
+            # os.chdir(path)
             contents = os.listdir(path)
         except PermissionError or TypeError:
             contents = []
-        dir_names = [item for item in contents if os.path.isdir(item)]
-        file_names = [item for item in contents if os.path.isfile(item)]
+        dir_names = [item for item in contents if
+                     os.path.isdir(os.path.join(path, item))]
+        file_names = [item for item in contents if
+                      os.path.isfile(os.path.join(path, item))]
         dir_details = [(dir_name,
                         # time.strftime('%m/%d/%Y', time.gmtime(
                         #     os.path.getmtime(dir_name))),
@@ -62,7 +59,7 @@ class Model:
                          "{} KB".format(
                              int(Model.get_file_size(file_name, SizeUnit.KB))))
                         for file_name in file_names]
-
+        # os.chdir(orig_path)
         return file_details, dir_details
 
     @staticmethod
@@ -80,5 +77,8 @@ class Model:
     @staticmethod
     def get_file_size(file_name, size_type=SizeUnit.BYTES):
         """ Get file in size in given unit like KB, MB or GB"""
-        size = os.path.getsize(file_name)
+        try:
+            size = os.path.getsize(file_name)
+        except FileNotFoundError as fnf:
+            return 0
         return Model.convert_unit(size, size_type)

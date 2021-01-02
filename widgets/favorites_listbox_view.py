@@ -25,4 +25,4 @@ class ListBox:
         index = int(w.curselection()[0])
         value = w.get(index)
         path = value[3:]
-        self.controller.on_click_list(path)
+        self.controller.on_favorite_click(path)

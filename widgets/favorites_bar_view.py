@@ -13,11 +13,22 @@ class FavoritesView:
                         padx=FavoritesView.MARGIN_X,
                         pady=FavoritesView.MARGIN_Y)
         self.label = tk.Label(self.frame, text="Favorites",
-                              font="Arial 12 bold", anchor="w", padx=FavoritesView.MARGIN_X)
-        self.label.grid(row=0, column=0, padx=(FavoritesView.PAD, FavoritesView.PAD * 5))
+                              font="Arial 12 bold", anchor="w",
+                              padx=FavoritesView.MARGIN_X)
+        self.label.grid(row=0, column=0,
+                        padx=(FavoritesView.PAD, FavoritesView.PAD * 5))
         self.add_btn = tk.Button(self.frame, text="✚", font="Arial 9")
         self.add_btn.bind("<Button-1>", controller.add_to_favorites)
-        self.add_btn.grid(row=0, column=1, padx=(FavoritesView.PAD, FavoritesView.PAD))
+        self.add_btn.grid(row=0, column=1,
+                          padx=(FavoritesView.PAD, FavoritesView.PAD))
         self.rmv_btn = tk.Button(self.frame, text="▬", font="Arial 9")
-        self.rmv_btn.bind("<Button-1>", controller.rmv_to_favorites)
-        self.rmv_btn.grid(row=0, column=2, padx=(FavoritesView.PAD, FavoritesView.PAD))
+        self.rmv_btn.bind("<Button-1>", controller.rmv_from_favorites)
+        self.rmv_btn.grid(row=0, column=2,
+                          padx=(FavoritesView.PAD, FavoritesView.PAD))
+
+    def load_favorites(self):
+        favorites = self.controller.model.favorites.get()
+        fav_listbox = self.controller.view.center_frame.favorites_lb_view.listbox
+        for fav in favorites:
+            fav_listbox.insert("end",
+                               " ⭐ " + fav.get("path"))
