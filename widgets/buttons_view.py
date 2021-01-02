@@ -1,5 +1,5 @@
 import tkinter as tk
-import tkinter.ttk as ttk
+import os
 import shutil
 
 
@@ -34,10 +34,11 @@ class ButtonsView:
 
     def handle_copy_event(self, event):
         self.src_path = self.controller.view.navbar.path.get() + "\\" + self.file_name
-        # tree.bind("<<TreeviewSelect>>", controller.on_tree_select)
         print(self.src_path)
 
     def handle_paste_event(self, event):
-        self.dst_path = self.controller.view.navbar.path.get() + "\\" + self.file_name
+        without_extra_slash = os.path.normpath(self.src_path)
+        file_to_copy = os.path.basename(without_extra_slash)
+        self.dst_path = self.controller.view.navbar.path.get() + "\\" + file_to_copy
         print(self.dst_path)
         shutil.copyfile(self.src_path, self.dst_path)
