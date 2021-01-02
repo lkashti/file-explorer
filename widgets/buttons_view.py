@@ -34,6 +34,7 @@ class ButtonsView:
 
     def handle_copy_event(self, event):
         self.src_path = self.controller.view.navbar.path.get() + "\\" + self.file_name
+        # tree.bind("<<TreeviewSelect>>", controller.on_tree_select)
         print(self.src_path)
 
     def handle_paste_event(self, event):
