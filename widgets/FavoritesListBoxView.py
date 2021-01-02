@@ -17,8 +17,7 @@ class ListBox:
         self.listbox.pack(fill=tk.BOTH)
         self.listbox.bind('<<ListboxSelect>>', self.on_select)
         self.frame.grid(row=5, column=0, sticky="nsew",
-                        padx=ListBox.MARGIN_X,
-                        pady=ListBox.MARGIN_Y)
+                        padx=ListBox.MARGIN_X)
 
     def on_select(self, event):
         # Note here that Tkinter passes an event object to onselect()

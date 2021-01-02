@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+import shutil
 
 
 class ButtonsView:
@@ -11,23 +12,31 @@ class ButtonsView:
         self.controller = controller
         self.frame = tk.Frame(root)
         self.label = tk.Label(self.frame, text="Options",
-                              font="Arial 12 bold", anchor="w", padx=ButtonsView.MARGIN_X,
-                              pady=ButtonsView.MARGIN_X * 2)
+                              font="Arial 12 bold", anchor="w", padx=ButtonsView.MARGIN_X)
         self.label.pack(fill=tk.X)
-        self.copy_btn = tk.Button(self.frame, text="Copy", font="Arial 9")
-        # self.copy_btn.grid(row=0, column=0, padx=5)
-        # self.copy_btn.bind("<Button-1>", controller.show_hidden_files)
-        self.copy_btn.pack(side=tk.LEFT, padx=(ButtonsView.MARGIN_X, ButtonsView.MARGIN_X))
-        self.paste_btn = tk.Button(self.frame, text="Paste", font="Arial 9")
-        # self.paste_btn.grid(row=0,column=1, padx=5)
+        self.copy_btn = tk.Button(self.frame, text="Copy", font="Arial 9 bold")
+        self.src_path = ""
+        self.dst_path = ""
+        self.file_name = ""
+        self.copy_btn.pack(side=tk.LEFT, padx=(ButtonsView.MARGIN_X * 2, ButtonsView.MARGIN_X))
+        self.paste_btn = tk.Button(self.frame, text="Paste", font="Arial 9 bold")
         self.paste_btn.pack(side=tk.LEFT, padx=(ButtonsView.MARGIN_X, ButtonsView.MARGIN_X))
-        self.move_btn = tk.Button(self.frame, text="Move", font="Arial 9")
-        # self.move_btn.grid(row=0, column=2, padx=5)
+        self.move_btn = tk.Button(self.frame, text="Move", font="Arial 9 bold")
         self.move_btn.pack(side=tk.LEFT, padx=(ButtonsView.MARGIN_X, ButtonsView.MARGIN_X))
-        # self.load_to_fav(controller.model.get_home_path())
-        # self.add_btn.grid(row=1, column=0, padx=ButtonsView.MARGIN_X, pady=ButtonsView.MARGIN_Y)
-        # self.all_checkbox.bind("<Button-1>", controller.print_all_selected)
-        # self.none_checkbox.bind("<Button-1>", controller.print_none_selected)
+        self.delete_btn = tk.Button(self.frame, text="Delete", font="Arial 9 bold")
+        self.delete_btn.pack(side=tk.LEFT, padx=(ButtonsView.MARGIN_X, ButtonsView.MARGIN_X))
+
+        self.copy_btn.bind("<Button-1>", self.handle_copy_event)
+        self.paste_btn.bind("<Button-1>", self.handle_paste_event)
         self.frame.grid(row=2, column=0,
                         sticky=tk.NSEW,
                         padx=ButtonsView.MARGIN_X, pady=ButtonsView.MARGIN_Y)
+
+    def handle_copy_event(self, event):
+        self.src_path = self.controller.view.navbar.path.get() + "\\" + self.file_name
+        print(self.src_path)
+
+    def handle_paste_event(self, event):
+        self.dst_path = self.controller.view.navbar.path.get() + "\\" + self.file_name
+        print(self.dst_path)
+        shutil.copyfile(self.src_path, self.dst_path)

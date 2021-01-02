@@ -42,13 +42,13 @@ class NavBar:
         self.navbar_frame.grid(row=0, column=0, sticky="ew",
                                ipady=NavBar.MARGIN_Y, ipadx=NavBar.PAD)
 
-        self.home_btn = tk.Button(self.navbar_frame, text="Home", font="Arial 9")
+        self.home_btn = tk.Button(self.navbar_frame, text="Home", font="Arial 9 bold")
         self.home_btn.pack(side=tk.LEFT, padx=NavBar.MARGIN_X)
-        self.back_btn = tk.Button(self.navbar_frame, text="Back", font="Arial 9")
+        self.back_btn = tk.Button(self.navbar_frame, text="Back", font="Arial 9 bold")
         self.back_btn.pack(side=tk.LEFT, padx=NavBar.MARGIN_X)
-        self.forward_btn = tk.Button(self.navbar_frame, text="Forward", font="Arial 9")
+        self.forward_btn = tk.Button(self.navbar_frame, text="Forward", font="Arial 9 bold")
         self.forward_btn.pack(side=tk.LEFT, padx=NavBar.MARGIN_X)
-
+        
         self.path_field = tk.Entry(self.navbar_frame, width=int(0.1 * width))
         self.path = tk.StringVar()
         self.path_field.configure(textvariable=self.path)

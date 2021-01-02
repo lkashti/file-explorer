@@ -72,6 +72,11 @@ class Controller:
             self.model.forward_stack.clear_stack()
             self.update_all_views(new_path)
 
+    def on_tree_select(self, event):
+        index = self.view.center_frame.right_frame.tree.focus()
+        line_tup = self.view.center_frame.right_frame.tree.item(index)
+        self.view.center_frame.buttons_view.file_name = line_tup['text']
+
     def update_treeview(self, path):
         self.view.center_frame.right_frame.tree.delete(
             *self.view.center_frame.right_frame.tree.get_children())
@@ -94,4 +99,6 @@ class Controller:
 
 
 if __name__ == '__main__':
+    # original = r'C:\Users\noami\OneDrive\Desktop\logos\back.png'
+    # target = r'C:\Users\noami\OneDrive\Desktop\back.png'
     c = Controller()
