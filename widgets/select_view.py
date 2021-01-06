@@ -19,8 +19,8 @@ class SelectView:
         self.none_checkbox = tk.Checkbutton(self.frame, text="None", font="Arial 10", variable=self.none_var)
         self.all_checkbox.pack(side=tk.LEFT, padx=(10, 4))
         self.none_checkbox.pack(side=tk.LEFT, padx=(4, 4))
-        self.all_checkbox.bind("<Button-1>", controller.print_all_selected)
-        self.none_checkbox.bind("<Button-1>", controller.print_none_selected)
+        self.all_checkbox.bind("<Button-1>", controller.select_all)
+        self.none_checkbox.bind("<Button-1>", controller.select_none)
         self.frame.grid(row=0, column=0,
                         sticky=tk.NSEW,
                         padx=SelectView.MARGIN_X,

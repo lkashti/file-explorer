@@ -4,6 +4,7 @@ from widgets.select_view import SelectView
 from widgets.status_bar_view import StatusBarView
 from widgets.tree_view import TreeView
 from widgets.buttons_view import ButtonsView
+from widgets.log_view import Log
 import tkinter.ttk as ttk
 import tkinter as tk
 
@@ -101,6 +102,7 @@ class CenterFrame:
         self.favorites_lb_view = ListBox(self.left_frame, controller)
         self.select_view = SelectView(self.left_frame, controller)
         self.buttons_view = ButtonsView(self.left_frame, controller)
+        self.log = Log(self.left_frame, controller)
 
     def show_folders_and_files(self, folder_details, file_details):
         idx = 1

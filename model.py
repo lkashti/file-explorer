@@ -41,18 +41,50 @@ class Model:
             contents = []
         dir_names = [item for item in contents if
                      os.path.isdir(os.path.join(path, item))]
+        dir_paths = []
+        for item in dir_names:
+            if os.path.isdir(os.path.join(path, item)):
+                dir_paths.append(os.path.join(path, item))
         file_names = [item for item in contents if
                       os.path.isfile(os.path.join(path, item))]
+        file_paths = []
+
+        for item in file_names:
+            if os.path.isfile(os.path.join(path, item)):
+                file_paths.append(os.path.join(path, item))
+
+        # files_time = []
+        # for i in file_paths:
+        #     try:
+        #         files_time.append(time.strftime('%m/%d/%Y', time.gmtime(os.path.getmtime(file_paths.pop()))))
+        #     except FileNotFoundError as e:
+        #     # except IOError as e:
+        #         print(e)
+        # print(files_time)
+        dir_dict_details = {}
+        for key in dir_names:
+            for value in dir_paths:
+                dir_dict_details[key] = value
+                dir_paths.remove(value)
+                break
+        file_dict_details = {}
+        for key in file_names:
+            for value in file_paths:
+                file_dict_details[key] = value
+                file_paths.remove(value)
+                break
+        # print(file_dict_details)
         dir_details = [(dir_name,
+                        # files_time.pop(),
                         # time.strftime('%m/%d/%Y', time.gmtime(
-                        #     os.path.getmtime(dir_name))),
+                        #     os.path.getsize(str(dir_path)))),
                         "File Folder",
                         "")
-                       for dir_name in dir_names]
+                       for dir_name,dir_path in dir_dict_details.items()]
         file_details = [(file_name,
                          # time last modified
-                         # time.strftime('%m/%d/%Y', time.gmtime(
-                         #     os.path.getmtime(file_name))),
+                         #     time.strftime('%m/%d/%Y', time.gmtime(
+                         #         os.path.getmtime(file_name))) ,
                          # extension
                          os.path.splitext(file_name)[1].upper() + " File",
                          # size

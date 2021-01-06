@@ -1,6 +1,7 @@
 import tkinter as tk
 from model import Model
 from view import View
+import shutil
 import os
 
 
@@ -16,7 +17,7 @@ class Controller:
         self.view.center_frame.favorites_view.load_favorites()
         self.root.mainloop()
 
-    def print_all_selected(self, event):
+    def select_all(self, event):
         if self.view.center_frame.select_view.all_var.get() == 0:
             self.view.center_frame.right_frame.tree.selection_set(
                 self.view.center_frame.right_frame.tree.get_children())
@@ -26,7 +27,7 @@ class Controller:
             self.view.center_frame.select_view.none_checkbox.config(
                 state=tk.NORMAL)
 
-    def print_none_selected(self, event):
+    def select_none(self, event):
         if self.view.center_frame.select_view.none_var.get() == 0:
             self.view.center_frame.right_frame.tree.selection_set()
             self.view.center_frame.select_view.all_checkbox.config(
@@ -76,6 +77,41 @@ class Controller:
         if len(self.model.forward_stack.stack) > 0:
             self.model.back_stack.push(self.view.navbar.path.get())
             self.update_all_views(self.model.forward_stack.pop())
+
+    def handle_copy_event(self, event):
+        self.view.center_frame.buttons_view.src_path = self.view.navbar.path.get() \
+                                                       + "\\" + self.view.center_frame.buttons_view.file_name
+        self.view.center_frame.log.log_text.config(text="{}".format(self.view.center_frame.buttons_view.src_path))
+
+    def handle_paste_event(self, event):
+        self.cpy_src_dst()
+        self.update_all_views(self.view.navbar.path.get())
+
+    def handle_move_event(self, event):
+        try:
+            self.cpy_src_dst()
+            os.remove(self.view.center_frame.buttons_view.src_path)
+            self.update_all_views(self.view.navbar.path.get())
+        except FileNotFoundError as e:
+            print(e.errno)
+
+    def handle_click_delete(self, event):
+        self.view.center_frame.log.log_text.config(text="-- Warning: -- \nDelete will erase file from PC\nstill want to delete?\nDouble Click on 'Delete'")
+
+    def handle_delete_event(self, event):
+        self.view.center_frame.buttons_view.src_path = self.view.navbar.path.get() + "\\" + self.view.center_frame.buttons_view.file_name
+        os.remove(self.view.center_frame.buttons_view.src_path)
+        self.update_all_views(self.view.navbar.path.get())
+
+    def cpy_src_dst(self):
+        if len(self.view.center_frame.buttons_view.src_path) > 2:
+            without_extra_slash = os.path.normpath(self.view.center_frame.buttons_view.src_path)
+            self.view.center_frame.log.log_text.config(text="{}".format(self.view.center_frame.buttons_view.src_path))
+            file_to_copy = os.path.basename(without_extra_slash)
+            self.view.center_frame.buttons_view.dst_path = self.view.navbar.path.get() + "\\" + file_to_copy
+            shutil.copyfile(self.view.center_frame.buttons_view.src_path, self.view.center_frame.buttons_view.dst_path)
+        else:
+            self.view.center_frame.log.log_text.config(text="You Need To Choose a File")
 
     def on_double_click(self, event):
         # get selected item
