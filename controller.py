@@ -17,50 +17,6 @@ class Controller:
         self.view.center_frame.favorites_view.load_favorites()
         self.root.mainloop()
 
-    def select_all(self, event):
-        if self.view.center_frame.select_view.all_var.get() == 0:
-            self.view.center_frame.right_frame.tree.selection_set(
-                self.view.center_frame.right_frame.tree.get_children())
-            self.view.center_frame.select_view.none_checkbox.config(
-                state=tk.DISABLED)
-        if self.view.center_frame.select_view.all_var.get() == 1:
-            self.view.center_frame.select_view.none_checkbox.config(
-                state=tk.NORMAL)
-
-    def select_none(self, event):
-        if self.view.center_frame.select_view.none_var.get() == 0:
-            self.view.center_frame.right_frame.tree.selection_set()
-            self.view.center_frame.select_view.all_checkbox.config(
-                state=tk.DISABLED)
-        if self.view.center_frame.select_view.none_var.get() == 1:
-            self.view.center_frame.select_view.all_checkbox.config(
-                state=tk.NORMAL)
-
-    def add_to_favorites(self, event):
-        # show addition in the view
-        favs = [item.get("path") for item in self.model.favorites.get()]
-        if self.view.navbar.path.get() not in favs:
-            fav_listbox = self.view.center_frame.favorites_lb_view.listbox
-            fav_listbox.insert("end",
-                               " ⭐ " + self.view.navbar.path.get())
-            # store favorite object in json file
-
-            self.model.favorites.store(self.view.navbar.path.get())
-
-    def rmv_from_favorites(self, event):
-        # delete from view
-        list_box = self.view.center_frame.favorites_lb_view.listbox
-        selected = list_box.curselection()
-        if selected is not ():
-            # the split is used to dismiss the star icon
-            selected_path = list_box.get(selected).split(" ", 2)[2]
-            list_box.delete(selected)
-            # remove from json file
-            self.model.favorites.remove(selected_path)
-
-    def show_hidden_files(self, event):
-        pass
-
     def handle_home_event(self, event):
         # event.widget# Pass data to view
         if self.view.navbar.path.get() != self.model.get_home_path():
@@ -78,25 +34,50 @@ class Controller:
             self.model.back_stack.push(self.view.navbar.path.get())
             self.update_all_views(self.model.forward_stack.pop())
 
+    def select_all(self, event):
+        if self.view.center_frame.select_view.all_var.get() == 0:
+            self.view.center_frame.select_view.none_checkbox.config(
+                state=tk.DISABLED)
+            self.view.center_frame.right_frame.tree.selection_set(
+                self.view.center_frame.right_frame.tree.get_children())
+        if self.view.center_frame.select_view.all_var.get() == 1:
+            self.view.center_frame.select_view.none_checkbox.config(
+                state=tk.NORMAL)
+            self.view.center_frame.right_frame.tree.selection_set()
+
+    def select_none(self, event):
+        if self.view.center_frame.select_view.none_var.get() == 0:
+            self.view.center_frame.select_view.all_checkbox.config(
+                state=tk.DISABLED)
+            self.view.center_frame.right_frame.tree.selection_set()
+        if self.view.center_frame.select_view.none_var.get() == 1:
+            self.view.center_frame.select_view.all_checkbox.config(
+                state=tk.NORMAL)
+
     def handle_copy_event(self, event):
         self.view.center_frame.buttons_view.src_path = self.view.navbar.path.get() \
                                                        + "\\" + self.view.center_frame.buttons_view.file_name
         self.view.center_frame.log.log_text.config(text="{}".format(self.view.center_frame.buttons_view.src_path))
 
     def handle_paste_event(self, event):
-        self.cpy_src_dst()
-        self.update_all_views(self.view.navbar.path.get())
+        try:
+            self.cpy_src_dst()
+            self.update_all_views(self.view.navbar.path.get())
+            self.view.center_frame.log.log_text.config(text="-- Will be show here --")
+        except FileNotFoundError as e:
+            print(e)
 
     def handle_move_event(self, event):
         try:
             self.cpy_src_dst()
             os.remove(self.view.center_frame.buttons_view.src_path)
+            self.view.center_frame.log.log_text.config(text="-- Will be show here --")
             self.update_all_views(self.view.navbar.path.get())
         except FileNotFoundError as e:
             print(e.errno)
 
     def handle_click_delete(self, event):
-        self.view.center_frame.log.log_text.config(text="-- Warning: -- \nDelete will erase file from PC\nstill want to delete?\nDouble Click on 'Delete'")
+        self.view.center_frame.log.log_text.config(text="-- Warning: -- \nDelete will erase file from PC\nStill want to delete?\nDouble Click on 'Delete'")
 
     def handle_delete_event(self, event):
         self.view.center_frame.buttons_view.src_path = self.view.navbar.path.get() + "\\" + self.view.center_frame.buttons_view.file_name
@@ -112,6 +93,35 @@ class Controller:
             shutil.copyfile(self.view.center_frame.buttons_view.src_path, self.view.center_frame.buttons_view.dst_path)
         else:
             self.view.center_frame.log.log_text.config(text="You Need To Choose a File")
+
+    def add_to_favorites(self, event):
+        # show addition in the view
+        favs = [item.get("path") for item in self.model.favorites.get()]
+        if self.view.navbar.path.get() not in favs:
+            fav_listbox = self.view.center_frame.favorites_lb_view.listbox
+            fav_listbox.insert("end",
+                               " ⭐ " + self.view.navbar.path.get())
+            # store favorite object in json file
+            self.model.favorites.store(self.view.navbar.path.get())
+
+    def rmv_from_favorites(self, event):
+        # delete from view
+        list_box = self.view.center_frame.favorites_lb_view.listbox
+        selected = list_box.curselection()
+        if selected is not ():
+            # the split is used to dismiss the star icon
+            selected_path = list_box.get(selected).split(" ", 2)[2]
+            list_box.delete(selected)
+            # remove from json file
+            self.model.favorites.remove(selected_path)
+
+    def on_list_view_select(self, event):
+        if self.view.center_frame.favorites_lb_view.listbox.size() > 0:
+            w = event.widget
+            index = int(w.curselection()[0])
+            value = w.get(index)
+            path = value[3:]
+            self.on_favorite_click(path)
 
     def on_double_click(self, event):
         # get selected item
@@ -129,6 +139,12 @@ class Controller:
             self.update_all_views(new_path)
             self.view.status_bar.item_label.config(text="None")
 
+    def on_favorite_click(self, new_path):
+        if os.path.isdir(new_path):
+            self.model.back_stack.push(self.view.navbar.path.get())
+            self.model.forward_stack.clear_stack()
+            self.update_all_views(new_path)
+
     def on_tree_select(self, event):
         index = self.view.center_frame.right_frame.tree.focus()
         line_tup = self.view.center_frame.right_frame.tree.item(index)
@@ -142,19 +158,7 @@ class Controller:
         self.view.center_frame.show_folders_and_files(folder_details,
                                                       file_details)
 
-    def on_favorite_click(self, new_path):
-        if os.path.isdir(new_path):
-            self.model.back_stack.push(self.view.navbar.path.get())
-            self.model.forward_stack.clear_stack()
-            self.update_all_views(new_path)
-
     def update_all_views(self, path):
         self.update_treeview(path)
         self.view.navbar.path.set(path)
         self.view.status_bar.load_item_count(path)
-
-
-if __name__ == '__main__':
-    # original = r'C:\Users\noami\OneDrive\Desktop\logos\back.png'
-    # target = r'C:\Users\noami\OneDrive\Desktop\back.png'
-    c = Controller()

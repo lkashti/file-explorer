@@ -15,14 +15,6 @@ class ListBox:
         self.scrollbar.config(command=self.listbox.yview)
         self.scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
         self.listbox.pack(fill=tk.BOTH)
-        self.listbox.bind('<<ListboxSelect>>', self.on_select)
+        self.listbox.bind('<<ListboxSelect>>', self.controller.on_list_view_select)
         self.frame.grid(row=5, column=0, sticky="nsew",
                         padx=ListBox.MARGIN_X)
-
-    def on_select(self, event):
-        # Note here that Tkinter passes an event object to onselect()
-        w = event.widget
-        index = int(w.curselection()[0])
-        value = w.get(index)
-        path = value[3:]
-        self.controller.on_favorite_click(path)

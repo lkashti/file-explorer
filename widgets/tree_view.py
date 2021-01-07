@@ -17,6 +17,6 @@ class TreeView:
         self.tree.heading("two", text="Date modified", anchor=tk.W)
         self.tree.heading("three", text="Type", anchor=tk.W)
         self.tree.heading("four", text="Size", anchor=tk.W)
-        self.tree.bind("<Double-1>", controller.on_double_click)
-        self.tree.bind("<<TreeviewSelect>>", controller.on_tree_select)
+        self.tree.bind("<Double-1>", self.controller.on_double_click)
+        self.tree.bind("<<TreeviewSelect>>", self.controller.on_tree_select)
         self.tree.pack()
