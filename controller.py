@@ -138,6 +138,12 @@ class Controller:
             path = value[3:]
             self.on_favorite_click(path)
 
+    def on_favorite_click(self, new_path):
+        if os.path.isdir(new_path):
+            self.model.back_stack.push(self.view.navbar.path.get())
+            self.model.forward_stack.clear_stack()
+            self.update_all_views(new_path)
+
     def on_double_click(self, event):
         # get selected item
         try:
@@ -153,12 +159,6 @@ class Controller:
             self.model.forward_stack.clear_stack()
             self.update_all_views(new_path)
             self.view.status_bar.item_label.config(text="None")
-
-    def on_favorite_click(self, new_path):
-        if os.path.isdir(new_path):
-            self.model.back_stack.push(self.view.navbar.path.get())
-            self.model.forward_stack.clear_stack()
-            self.update_all_views(new_path)
 
     def on_tree_select(self, event):
         index = self.view.center_frame.right_frame.tree.focus()
@@ -177,4 +177,6 @@ class Controller:
     def update_all_views(self, path):
         self.update_treeview(path)
         self.view.navbar.path.set(path)
-        self.view.status_bar.load_item_count(path)
+        self.view.status_bar.item_count = self.model.get_folder_file_count(
+            path, self.view.center_frame.select_view.hidden_flag)
+        self.view.status_bar.item_count_label.config(text=self.view.status_bar.item_count)

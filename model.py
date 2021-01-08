@@ -1,5 +1,6 @@
 import os
 import time
+import glob
 import enum
 from utils.navigation_stack import NavigationStack
 from utils.favorites import FavoritesHandler
@@ -24,11 +25,17 @@ class Model:
         return os.path.expanduser("~")
 
     @staticmethod
-    def get_folder_file_count(path):
-        try:
-            num = len(os.listdir(path))
-        except PermissionError or TypeError:
-            num = 0
+    def get_folder_file_count(path,hidden):
+        if hidden:
+            try:
+                num = len(os.listdir(path))
+            except PermissionError or TypeError:
+                num = 0
+        if not hidden:
+            try:
+                num = len(glob.glob(os.path.join(path, '*')))
+            except PermissionError or TypeError:
+                num = 0
         return num
 
     @staticmethod
