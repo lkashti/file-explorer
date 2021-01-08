@@ -49,7 +49,6 @@ class Model:
         if not hidden:
             dir_names = [item for item in contents if
                             os.path.isdir(os.path.join(path, item)) and not item.startswith('.')]
-
             file_names = [item for item in contents if
                           os.path.isfile(os.path.join(path, item)) and not item.startswith('.')]
 
@@ -62,8 +61,6 @@ class Model:
             if os.path.isfile(os.path.join(path, item)):
                 file_paths.append(os.path.join(path, item))
 
-        print(dir_names)
-        print(file_names)
         # files_time = []
         # for i in file_paths:
         #     try:
