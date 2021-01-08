@@ -15,6 +15,7 @@ class SelectView:
         self.select_label.pack(side=tk.LEFT)
         self.all_var = tk.IntVar()
         self.none_var = tk.IntVar()
+        self.checkbox_flag = False
         self.all_checkbox = tk.Checkbutton(self.frame, text="All", font="Arial 10", variable=self.all_var)
         self.none_checkbox = tk.Checkbutton(self.frame, text="None", font="Arial 10", variable=self.none_var)
         self.all_checkbox.pack(side=tk.LEFT, padx=(10, 4))

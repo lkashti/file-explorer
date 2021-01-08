@@ -18,7 +18,6 @@ class Controller:
         self.root.mainloop()
 
     def handle_home_event(self, event):
-        # event.widget# Pass data to view
         if self.view.navbar.path.get() != self.model.get_home_path():
             self.model.back_stack.clear_stack()
             self.model.forward_stack.clear_stack()
@@ -35,24 +34,31 @@ class Controller:
             self.update_all_views(self.model.forward_stack.pop())
 
     def select_all(self, event):
-        if self.view.center_frame.select_view.all_var.get() == 0:
-            self.view.center_frame.select_view.none_checkbox.config(
-                state=tk.DISABLED)
-            self.view.center_frame.right_frame.tree.selection_set(
-                self.view.center_frame.right_frame.tree.get_children())
-        if self.view.center_frame.select_view.all_var.get() == 1:
-            self.view.center_frame.select_view.none_checkbox.config(
-                state=tk.NORMAL)
-            self.view.center_frame.right_frame.tree.selection_set()
+        if not self.view.center_frame.select_view.checkbox_flag:
+            if self.view.center_frame.select_view.all_var.get() == 0:
+                self.view.center_frame.select_view.checkbox_flag = True
+                self.view.center_frame.select_view.none_checkbox.config(
+                    state=tk.DISABLED)
+                self.view.center_frame.right_frame.tree.selection_set(
+                    self.view.center_frame.right_frame.tree.get_children())
+        else:
+            if self.view.center_frame.select_view.all_var.get() == 1:
+                self.view.center_frame.select_view.none_checkbox.config(
+                    state=tk.NORMAL)
+                self.view.center_frame.select_view.checkbox_flag = False
 
     def select_none(self, event):
-        if self.view.center_frame.select_view.none_var.get() == 0:
-            self.view.center_frame.select_view.all_checkbox.config(
-                state=tk.DISABLED)
-            self.view.center_frame.right_frame.tree.selection_set()
-        if self.view.center_frame.select_view.none_var.get() == 1:
-            self.view.center_frame.select_view.all_checkbox.config(
-                state=tk.NORMAL)
+        if not self.view.center_frame.select_view.checkbox_flag:
+            if self.view.center_frame.select_view.none_var.get() == 0:
+                self.view.center_frame.select_view.checkbox_flag = True
+                self.view.center_frame.select_view.all_checkbox.config(
+                    state=tk.DISABLED)
+                self.view.center_frame.right_frame.tree.selection_set()
+        else:
+            if self.view.center_frame.select_view.none_var.get() == 1:
+                self.view.center_frame.select_view.all_checkbox.config(
+                    state=tk.NORMAL)
+                self.view.center_frame.select_view.checkbox_flag = False
 
     def handle_copy_event(self, event):
         self.view.center_frame.buttons_view.src_path = self.view.navbar.path.get() \
@@ -71,8 +77,8 @@ class Controller:
         try:
             self.cpy_src_dst()
             os.remove(self.view.center_frame.buttons_view.src_path)
-            self.view.center_frame.log.log_text.config(text="-- Will be show here --")
             self.update_all_views(self.view.navbar.path.get())
+            self.view.center_frame.log.log_text.config(text="-- Will be show here --")
         except FileNotFoundError as e:
             print(e.errno)
 
