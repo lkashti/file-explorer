@@ -32,27 +32,38 @@ class Model:
         return num
 
     @staticmethod
-    def get_content_from_path(path):
+    def get_content_from_path(path, hidden):
         try:
             # orig_path = os.getcwd()
             # os.chdir(path)
             contents = os.listdir(path)
         except PermissionError or TypeError:
             contents = []
-        dir_names = [item for item in contents if
-                     os.path.isdir(os.path.join(path, item))]
+
+        if hidden:
+            dir_names = [item for item in contents if
+                         os.path.isdir(os.path.join(path, item))]
+            file_names = [item for item in contents if
+                          os.path.isfile(os.path.join(path, item))]
+
+        if not hidden:
+            dir_names = [item for item in contents if
+                            os.path.isdir(os.path.join(path, item)) and not item.startswith('.')]
+
+            file_names = [item for item in contents if
+                          os.path.isfile(os.path.join(path, item)) and not item.startswith('.')]
+
+        file_paths = []
         dir_paths = []
         for item in dir_names:
             if os.path.isdir(os.path.join(path, item)):
                 dir_paths.append(os.path.join(path, item))
-        file_names = [item for item in contents if
-                      os.path.isfile(os.path.join(path, item))]
-        file_paths = []
-
         for item in file_names:
             if os.path.isfile(os.path.join(path, item)):
                 file_paths.append(os.path.join(path, item))
 
+        print(dir_names)
+        print(file_names)
         # files_time = []
         # for i in file_paths:
         #     try:
@@ -73,7 +84,7 @@ class Model:
                 file_dict_details[key] = value
                 file_paths.remove(value)
                 break
-        # print(file_dict_details)
+
         dir_details = [(dir_name,
                         # files_time.pop(),
                         # time.strftime('%m/%d/%Y', time.gmtime(

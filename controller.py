@@ -60,6 +60,14 @@ class Controller:
                     state=tk.NORMAL)
                 self.view.center_frame.select_view.checkbox_flag = False
 
+    def show_hidden(self, event):
+        if self.view.center_frame.select_view.hidden_var.get() == 0:
+            self.view.center_frame.select_view.hidden_flag = True
+            self.update_all_views(self.view.navbar.path.get())
+        if self.view.center_frame.select_view.hidden_var.get() == 1:
+            self.view.center_frame.select_view.hidden_flag = False
+            self.update_all_views(self.view.navbar.path.get())
+
     def handle_copy_event(self, event):
         self.view.center_frame.buttons_view.src_path = self.view.navbar.path.get() \
                                                        + "\\" + self.view.center_frame.buttons_view.file_name
@@ -83,7 +91,8 @@ class Controller:
             print(e.errno)
 
     def handle_click_delete(self, event):
-        self.view.center_frame.log.log_text.config(text="-- Warning: -- \nDelete will erase file from PC\nStill want to delete?\nDouble Click on 'Delete'")
+        self.view.center_frame.log.log_text.config(
+            text="-- Warning: -- \nDelete will erase file from PC\nStill want to delete?\nDouble Click on 'Delete'")
 
     def handle_delete_event(self, event):
         self.view.center_frame.buttons_view.src_path = self.view.navbar.path.get() + "\\" + self.view.center_frame.buttons_view.file_name
@@ -160,7 +169,8 @@ class Controller:
     def update_treeview(self, path):
         self.view.center_frame.right_frame.tree.delete(
             *self.view.center_frame.right_frame.tree.get_children())
-        folder_details, file_details = self.model.get_content_from_path(path)
+        folder_details, file_details = self.model.get_content_from_path(
+            path, self.view.center_frame.select_view.hidden_flag)
         self.view.center_frame.show_folders_and_files(folder_details,
                                                       file_details)
 
