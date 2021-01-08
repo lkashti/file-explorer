@@ -3,6 +3,8 @@ from model import Model
 from view import View
 import shutil
 import os
+import subprocess
+import sys
 
 
 class Controller:
@@ -32,6 +34,13 @@ class Controller:
         if len(self.model.forward_stack.stack) > 0:
             self.model.back_stack.push(self.view.navbar.path.get())
             self.update_all_views(self.model.forward_stack.pop())
+
+    def handle_enter_path(self, event):
+        try:
+            self.update_all_views(self.view.navbar.path.get())
+            self.view.center_frame.log.log_text.config(text="-- Will be show here --")
+        except FileNotFoundError as e:
+            self.view.center_frame.log.log_text.config(text="Path is not valid")
 
     def select_all(self, event):
         if not self.view.center_frame.select_view.checkbox_flag:
@@ -159,6 +168,8 @@ class Controller:
             self.model.forward_stack.clear_stack()
             self.update_all_views(new_path)
             self.view.status_bar.item_label.config(text="None")
+        # if os.path.isfile(os.path.join(self.view.navbar.path.get(), item_text)):
+        #     print(os.path.join(self.view.navbar.path.get(), item_text))
 
     def on_tree_select(self, event):
         index = self.view.center_frame.right_frame.tree.focus()

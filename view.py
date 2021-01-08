@@ -54,7 +54,7 @@ class NavBar:
         self.path = tk.StringVar()
         self.path_field.configure(textvariable=self.path)
         self.path_field.pack(side=tk.LEFT, ipady=NavBar.PAD)
-
+        self.path_field.bind('<Return>', self.controller.handle_enter_path)
         self.search_field = tk.Entry(self.navbar_frame,
                                      width=int(0.04 * width))
         self.search_text = tk.StringVar()
