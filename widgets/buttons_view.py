@@ -1,6 +1,4 @@
 import tkinter as tk
-import os
-import shutil
 
 
 class ButtonsView:
