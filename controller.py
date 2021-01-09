@@ -2,6 +2,7 @@ import tkinter as tk
 from model import Model
 from view import View
 import shutil
+import errno
 import os
 
 
@@ -164,7 +165,10 @@ class Controller:
 
     def handle_delete_event(self, event):
         self.view.center_frame.buttons_view.src_path = self.view.navbar.path.get() + "\\" + self.view.center_frame.buttons_view.file_name
-        os.remove(self.view.center_frame.buttons_view.src_path)
+        if os.path.isfile(self.view.center_frame.buttons_view.src_path):
+            os.remove(self.view.center_frame.buttons_view.src_path)
+        if os.path.isdir(self.view.center_frame.buttons_view.src_path):
+            shutil.rmtree(self.view.center_frame.buttons_view.src_path)
         self.update_all_views(self.view.navbar.path.get())
 
     '''
@@ -177,11 +181,41 @@ class Controller:
         if len(self.view.center_frame.buttons_view.src_path) > 2:
             without_extra_slash = os.path.normpath(self.view.center_frame.buttons_view.src_path)
             self.view.center_frame.log.log_text.config(text="{}".format(self.view.center_frame.buttons_view.src_path))
-            file_to_copy = os.path.basename(without_extra_slash)
-            self.view.center_frame.buttons_view.dst_path = self.view.navbar.path.get() + "\\" + file_to_copy
-            shutil.copyfile(self.view.center_frame.buttons_view.src_path, self.view.center_frame.buttons_view.dst_path)
+            if os.path.isfile(self.view.center_frame.buttons_view.src_path):
+                file_to_copy = os.path.basename(without_extra_slash)
+                self.view.center_frame.buttons_view.dst_path = self.view.navbar.path.get() + "\\" + file_to_copy
+                shutil.copyfile(self.view.center_frame.buttons_view.src_path,
+                                self.view.center_frame.buttons_view.dst_path)
+            if os.path.isdir(self.view.center_frame.buttons_view.src_path):
+                src = self.view.center_frame.buttons_view.src_path
+                dst = self.view.navbar.path.get()
+                self.copytree(src, dst)
         else:
             self.view.center_frame.log.log_text.config(text="You Need To Choose a File")
+
+    '''
+    Copy source directory into destination directory recursively     
+    '''
+
+    def copy_tree(self, src, dst):
+        try:
+            dst = os.path.join(dst, os.path.basename(src))
+            if not os.path.exists(dst):
+                os.makedirs(dst)
+            contents = os.listdir(src)
+            for item in contents:
+                src = self.view.center_frame.buttons_view.src_path + "\\" + item
+                self.view.center_frame.buttons_view.dst_path = dst + "\\" + item
+                if os.path.isfile(src):
+                    shutil.copyfile(src, self.view.center_frame.buttons_view.dst_path)
+                elif os.path.isdir(src):
+                    self.copy_tree(src, self.view.center_frame.buttons_view.dst_path)
+        except OSError as e:
+            # If the error was caused because the source wasn't a directory
+            if e.errno == errno.ENOTDIR:
+                shutil.copytree(src, dst)
+            else:
+                print('Directory not copied. Error: %s' % e)
 
     '''
     Adding path to listbox named 'Favorites' and store its path in json file for future uses     
