@@ -1,9 +1,10 @@
-import tkinter as tk
 from model import Model
 from view import View
+import tkinter as tk
 import operator
 import shutil
 import errno
+import time
 import os
 
 
@@ -17,6 +18,8 @@ class Controller:
         # initialization
         self.folder_details = []
         self.file_details = []
+        self.results = []
+        self.searched_path = ""
         self.update_all_views(self.model.get_home_path())
         self.view.center_frame.favorites_view.load_favorites()
         self.root.mainloop()
@@ -64,7 +67,25 @@ class Controller:
         except FileNotFoundError as e:
             self.view.center_frame.log.log_text.config(text="Path is not valid")
 
-    #   Left side of center frame Functionality
+    '''
+    Handle search event by using two functions;
+    find_all_files - use os.walk in addition to find an item recursively
+    change_tree_view_cols - change the current tree into new tree
+    '''
+
+    def handle_search_path(self, event):
+        exclude = ["#4", "#5"]
+        try:
+            # self.view.navbar.navbar_frame.config(bg="red")
+            self.results = self.find_all_files(self.view.navbar.search_field.get(), self.model.get_home_path())
+        except FileNotFoundError:
+            pass
+        if len(self.results) > 1:
+            self.change_tree_view_cols(exclude)
+            # self.view.navbar.navbar_frame.config(bg="lavender")
+
+        #   Left side of center frame Functionality
+
     '''
     Select all the elements in the tree view 
     Flag is using to handle an UI error after Disable the 'None' checkbox
@@ -125,8 +146,9 @@ class Controller:
     def handle_copy_event(self, event):
         self.view.center_frame.buttons_view.src_path = self.view.navbar.path.get() \
                                                        + "\\" + self.view.center_frame.buttons_view.file_name
-        self.view.center_frame.log.log_text.config(text="{}".format("Source: "+
-            os.path.basename(os.path.normpath(self.view.center_frame.buttons_view.src_path))))
+        self.view.center_frame.log.log_text.config(text="{}".format("Source: " +
+                                                                    os.path.basename(os.path.normpath(
+                                                                        self.view.center_frame.buttons_view.src_path))))
 
     '''
     Paste Button - call to function that used by 'pate' and 'move' actions; will be detailed before
@@ -292,10 +314,12 @@ class Controller:
         # clear tree before update
         if os.path.isdir(os.path.join(self.view.navbar.path.get(), item_text)):
             new_path = os.path.join(self.view.navbar.path.get(), item_text)
-            self.model.back_stack.push(self.view.navbar.path.get())
-            self.model.forward_stack.clear_stack()
-            self.update_all_views(new_path)
-            self.view.status_bar.item_label.config(text="None")
+        elif os.path.isdir(os.path.dirname(self.searched_path)):
+            new_path = os.path.dirname(self.searched_path)
+        self.model.back_stack.push(self.view.navbar.path.get())
+        self.model.forward_stack.clear_stack()
+        self.update_all_views(new_path)
+        self.view.status_bar.item_label.config(text="None")
 
     '''
     Display the selected file name in the status bar
@@ -306,12 +330,20 @@ class Controller:
         line_tup = self.view.center_frame.right_frame.tree.item(index)
         self.view.center_frame.buttons_view.file_name = line_tup['text']
         self.view.status_bar.item_label.config(text=line_tup['text'])
+        catch = self.view.center_frame.right_frame.tree.focus()
+        self.searched_path = self.view.center_frame.right_frame.tree.item(catch)['values'][1]
+        # print(self.view.center_frame.right_frame.tree.item(check)['values'][1])
+        # self.view.navbar.path_field.config(
+        #     textvariable="{}".format(self.view.center_frame.right_frame.tree.item(catch)['values'][1]))
 
     '''
     Update children of the tree view be removing old children and inserting current path children    
     '''
 
     def update_treeview(self, path):
+        exclude = ["#2"]
+        self.change_tree_view_cols(exclude)
+        self.change_tree_view_cols(exclude)
         self.view.center_frame.right_frame.tree.delete(
             *self.view.center_frame.right_frame.tree.get_children())
         self.folder_details, self.file_details = self.model.get_content_from_path(
@@ -319,13 +351,18 @@ class Controller:
         self.view.center_frame.show_folders_and_files(self.folder_details,
                                                       self.file_details)
 
-    def sort_tree_view(self,index):
+    '''
+    Sort a column from tree view by the index of the column    
+    '''
+
+    def sort_tree_view(self, index):
         self.view.center_frame.right_frame.tree.delete(
             *self.view.center_frame.right_frame.tree.get_children())
-        self.folder_details.sort(key = operator.itemgetter(index))
+        self.folder_details.sort(key=operator.itemgetter(index))
         self.file_details.sort(key=operator.itemgetter(index))
         self.view.center_frame.show_folders_and_files(self.folder_details,
                                                       self.file_details)
+
     '''
     Update all views - tree, navigation bar, status bar items counter    
     '''
@@ -336,3 +373,30 @@ class Controller:
         self.view.status_bar.item_count = self.model.get_folder_file_count(
             path, self.view.center_frame.select_view.hidden_flag)
         self.view.status_bar.item_count_label.config(text=self.view.status_bar.item_count)
+
+    def find_all_files(self, name, path):
+        result = []
+        try:
+            temp_time = time.strftime('%m/%d/%Y', time.gmtime(os.path.getmtime(path)))
+        except FileNotFoundError:
+            temp_time = "No Permission"
+        for root, dirs, files in os.walk(path):
+            if name in files:
+                result.append((name, os.path.join(root, name), temp_time))
+        return result
+
+    def change_tree_view_cols(self, excludes):
+        displaycolumns = []
+        self.view.center_frame.right_frame.tree.delete(
+            *self.view.center_frame.right_frame.tree.get_children())
+        self.view.center_frame.right_frame.exclusion_list.clear()
+        for i in excludes:
+            self.view.center_frame.right_frame.exclusion_list.append(i)
+        for col in self.view.center_frame.right_frame.tree["columns"]:
+            if not "%s" % col in self.view.center_frame.right_frame.exclusion_list:
+                displaycolumns.append(col)
+        self.view.center_frame.right_frame.tree["displaycolumns"] = displaycolumns
+        for result in self.results:
+            self.view.center_frame.right_frame.tree.insert("", index="end",
+                                                           text=result[0],
+                                                           values=result[0:])

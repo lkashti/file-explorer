@@ -74,6 +74,7 @@ class NavBar:
         self.forward_btn.bind("<ButtonRelease>",
                               self.controller.handle_forward_event)
         self.path_field.bind('<Return>', self.controller.handle_enter_path)
+        self.search_field.bind('<Return>',self.controller.handle_search_path)
 
 
 class CenterFrame:
@@ -123,4 +124,3 @@ class CenterFrame:
                                          text=file_detail[0],
                                          values=file_detail[0:])
             idx += 1
-
