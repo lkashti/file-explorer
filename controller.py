@@ -319,38 +319,13 @@ class Controller:
         self.view.center_frame.show_folders_and_files(self.folder_details,
                                                       self.file_details)
 
-    def sort_by_name(self):
+    def sort_tree_view(self,index):
         self.view.center_frame.right_frame.tree.delete(
             *self.view.center_frame.right_frame.tree.get_children())
-        self.folder_details.sort(key = operator.itemgetter(0))
-        self.file_details.sort(key=operator.itemgetter(0))
+        self.folder_details.sort(key = operator.itemgetter(index))
+        self.file_details.sort(key=operator.itemgetter(index))
         self.view.center_frame.show_folders_and_files(self.folder_details,
                                                       self.file_details)
-
-    def sort_by_data_modified(self):
-        self.view.center_frame.right_frame.tree.delete(
-            *self.view.center_frame.right_frame.tree.get_children())
-        self.folder_details.sort(key = operator.itemgetter(1))
-        self.file_details.sort(key=operator.itemgetter(1))
-        self.view.center_frame.show_folders_and_files(self.folder_details,
-                                                      self.file_details)
-
-    def sort_by_type(self):
-        self.view.center_frame.right_frame.tree.delete(
-            *self.view.center_frame.right_frame.tree.get_children())
-        self.folder_details.sort(key = operator.itemgetter(2))
-        self.file_details.sort(key=operator.itemgetter(2))
-        self.view.center_frame.show_folders_and_files(self.folder_details,
-                                                      self.file_details)
-
-    def sort_by_size(self):
-        self.view.center_frame.right_frame.tree.delete(
-            *self.view.center_frame.right_frame.tree.get_children())
-        self.folder_details.sort(key = operator.itemgetter(3))
-        self.file_details.sort(key=operator.itemgetter(3))
-        self.view.center_frame.show_folders_and_files(self.folder_details,
-                                                      self.file_details)
-
     '''
     Update all views - tree, navigation bar, status bar items counter    
     '''
