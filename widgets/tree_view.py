@@ -15,12 +15,14 @@ class TreeView:
         self.tree.column("two", width=200, minwidth=120, stretch=tk.NO)
         self.tree.column("three", width=150, minwidth=50)
         self.tree.column("four", width=150, minwidth=50, stretch=tk.NO)
-        self.tree.heading("one", text="Name", anchor=tk.W)
-        self.tree.heading("two", text="Date modified", anchor=tk.W)
-        self.tree.heading("three", text="Type", anchor=tk.W)
-        self.tree.heading("four", text="Size", anchor=tk.W)
+        self.tree.heading("one", text="Name", anchor=tk.W,command=self.controller.sort_by_name)
+        self.tree.heading("two", text="Date modified", anchor=tk.W,command=self.controller.sort_by_data_modified)
+        self.tree.heading("three", text="Type", anchor=tk.W,command=self.controller.sort_by_type)
+        self.tree.heading("four", text="Size", anchor=tk.W,command=self.controller.sort_by_size)
         # Bind to functionality
         self.tree.bind("<Double-1>", self.controller.on_double_click)
         self.tree.bind("<<TreeviewSelect>>", self.controller.on_tree_select)
+
         # Locate current frame in right's side frame grid
         self.tree.pack()
+

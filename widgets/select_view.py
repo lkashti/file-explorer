@@ -23,7 +23,7 @@ class SelectView:
         # Initializing internal widgets - checkboxes
         self.all_checkbox = tk.Checkbutton(self.frame, text="All", font="Arial 10", variable=self.all_var, bg="lavender")
         self.none_checkbox = tk.Checkbutton(self.frame, text="None", font="Arial 10", variable=self.none_var, bg="lavender")
-        self.hidden_checkbox = tk.Checkbutton(self.frame, text="Hidden Items", font="Arial 10", variable=self.hidden_var, bg="lavender")
+        self.hidden_checkbox = tk.Checkbutton(self.frame, text="Show Hidden", font="Arial 10", variable=self.hidden_var, bg="lavender")
         self.all_checkbox.pack(side=tk.LEFT, padx=(10, 4))
         self.none_checkbox.pack(side=tk.LEFT, padx=(4, 4))
         self.hidden_checkbox.pack(side=tk.LEFT, padx=(4, 4))

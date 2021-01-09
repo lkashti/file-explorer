@@ -1,10 +1,11 @@
 import tkinter as tk
 from model import Model
 from view import View
+import operator
 import shutil
 import errno
 import os
-from os.path import normpath, basename
+
 
 class Controller:
     def __init__(self):
@@ -14,6 +15,8 @@ class Controller:
         self.view = View(self.root, self)
         self.root.deiconify()
         # initialization
+        self.folder_details = []
+        self.file_details = []
         self.update_all_views(self.model.get_home_path())
         self.view.center_frame.favorites_view.load_favorites()
         self.root.mainloop()
@@ -108,9 +111,11 @@ class Controller:
         if self.view.center_frame.select_view.hidden_var.get() == 0:
             self.view.center_frame.select_view.hidden_flag = True
             self.update_all_views(self.view.navbar.path.get())
+            self.view.center_frame.select_view.hidden_checkbox.config(text="Hide Hidden")
         if self.view.center_frame.select_view.hidden_var.get() == 1:
             self.view.center_frame.select_view.hidden_flag = False
             self.update_all_views(self.view.navbar.path.get())
+            self.view.center_frame.select_view.hidden_checkbox.config(text="Show Hidden")
 
     '''
     Copy Button - set the source file for this action by taking the current path and add the file name,
@@ -121,7 +126,7 @@ class Controller:
         self.view.center_frame.buttons_view.src_path = self.view.navbar.path.get() \
                                                        + "\\" + self.view.center_frame.buttons_view.file_name
         self.view.center_frame.log.log_text.config(text="{}".format("Source: "+
-            basename(normpath(self.view.center_frame.buttons_view.src_path))))
+            os.path.basename(os.path.normpath(self.view.center_frame.buttons_view.src_path))))
 
     '''
     Paste Button - call to function that used by 'pate' and 'move' actions; will be detailed before
@@ -309,10 +314,42 @@ class Controller:
     def update_treeview(self, path):
         self.view.center_frame.right_frame.tree.delete(
             *self.view.center_frame.right_frame.tree.get_children())
-        folder_details, file_details = self.model.get_content_from_path(
+        self.folder_details, self.file_details = self.model.get_content_from_path(
             path, self.view.center_frame.select_view.hidden_flag)
-        self.view.center_frame.show_folders_and_files(folder_details,
-                                                      file_details)
+        self.view.center_frame.show_folders_and_files(self.folder_details,
+                                                      self.file_details)
+
+    def sort_by_name(self):
+        self.view.center_frame.right_frame.tree.delete(
+            *self.view.center_frame.right_frame.tree.get_children())
+        self.folder_details.sort(key = operator.itemgetter(0))
+        self.file_details.sort(key=operator.itemgetter(0))
+        self.view.center_frame.show_folders_and_files(self.folder_details,
+                                                      self.file_details)
+
+    def sort_by_data_modified(self):
+        self.view.center_frame.right_frame.tree.delete(
+            *self.view.center_frame.right_frame.tree.get_children())
+        self.folder_details.sort(key = operator.itemgetter(1))
+        self.file_details.sort(key=operator.itemgetter(1))
+        self.view.center_frame.show_folders_and_files(self.folder_details,
+                                                      self.file_details)
+
+    def sort_by_type(self):
+        self.view.center_frame.right_frame.tree.delete(
+            *self.view.center_frame.right_frame.tree.get_children())
+        self.folder_details.sort(key = operator.itemgetter(2))
+        self.file_details.sort(key=operator.itemgetter(2))
+        self.view.center_frame.show_folders_and_files(self.folder_details,
+                                                      self.file_details)
+
+    def sort_by_size(self):
+        self.view.center_frame.right_frame.tree.delete(
+            *self.view.center_frame.right_frame.tree.get_children())
+        self.folder_details.sort(key = operator.itemgetter(3))
+        self.file_details.sort(key=operator.itemgetter(3))
+        self.view.center_frame.show_folders_and_files(self.folder_details,
+                                                      self.file_details)
 
     '''
     Update all views - tree, navigation bar, status bar items counter    
