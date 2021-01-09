@@ -4,7 +4,7 @@ from view import View
 import shutil
 import errno
 import os
-
+from os.path import normpath, basename
 
 class Controller:
     def __init__(self):
@@ -120,7 +120,8 @@ class Controller:
     def handle_copy_event(self, event):
         self.view.center_frame.buttons_view.src_path = self.view.navbar.path.get() \
                                                        + "\\" + self.view.center_frame.buttons_view.file_name
-        self.view.center_frame.log.log_text.config(text="{}".format(self.view.center_frame.buttons_view.src_path))
+        self.view.center_frame.log.log_text.config(text="{}".format("Source: "+
+            basename(normpath(self.view.center_frame.buttons_view.src_path))))
 
     '''
     Paste Button - call to function that used by 'pate' and 'move' actions; will be detailed before
@@ -173,14 +174,15 @@ class Controller:
 
     '''
     Main functionality of 'Move' and 'Paste'
-    Check if the user select a source file, set its path and copy to sedtination using 'shutil' package
+    Check if the user select a source file, set its path and copy to destination using 'shutil' package
     If user did not select a source file - an error will display under log        
     '''
 
     def cpy_src_dst(self):
         if len(self.view.center_frame.buttons_view.src_path) > 2:
             without_extra_slash = os.path.normpath(self.view.center_frame.buttons_view.src_path)
-            self.view.center_frame.log.log_text.config(text="{}".format(self.view.center_frame.buttons_view.src_path))
+            # self.view.center_frame.log.log_text.config(text="{}".format(
+            #     basename(normpath(self.view.center_frame.buttons_view.src_path))))
             if os.path.isfile(self.view.center_frame.buttons_view.src_path):
                 file_to_copy = os.path.basename(without_extra_slash)
                 self.view.center_frame.buttons_view.dst_path = self.view.navbar.path.get() + "\\" + file_to_copy
@@ -189,7 +191,7 @@ class Controller:
             if os.path.isdir(self.view.center_frame.buttons_view.src_path):
                 src = self.view.center_frame.buttons_view.src_path
                 dst = self.view.navbar.path.get()
-                self.copytree(src, dst)
+                self.copy_tree(src, dst)
         else:
             self.view.center_frame.log.log_text.config(text="You Need To Choose a File")
 

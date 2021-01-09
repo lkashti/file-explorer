@@ -18,9 +18,9 @@ class StatusBarView:
                                          textvariable=self.item_count, bg="lavender")
         self.items_label = tk.Label(self.frame, text="Items:", bg="lavender")
         self.items_label.pack(side=tk.LEFT, padx=(StatusBarView.MARGIN_X * 68, StatusBarView.MARGIN_X))
-        self.item_label.pack(side=tk.LEFT)
         self.item_count_label.pack(side=tk.LEFT)
         self.selected_label.pack(side=tk.LEFT, padx=(StatusBarView.MARGIN_X * 20, StatusBarView.MARGIN_X))
+        self.item_label.pack(side=tk.LEFT)
         # Locate current frame in main's window frame grid
         self.frame.grid(row=2, column=0, sticky="ew",
                         ipadx=StatusBarView.MARGIN_X, ipady=StatusBarView.MARGIN_Y)
