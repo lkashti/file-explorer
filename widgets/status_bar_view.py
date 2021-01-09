@@ -2,23 +2,26 @@ import tkinter as tk
 
 
 class StatusBarView:
-    PADX = 4
-    PADY = 5
-
+    MARGIN_X = 4
+    MARGIN_Y = 5
+    '''
+    Status bar widget - display number of items and current selected item
+    '''
     def __init__(self, root, controller):
         self.controller = controller
-        self.frame = tk.Frame(root)
-        self.frame.grid(row=2, column=0, sticky="ew",
-                        ipadx=StatusBarView.PADX, ipady=StatusBarView.PADY)
-
-        self.selected_label = tk.Label(self.frame, text="Selected item:")
-        self.item_label = tk.Label(self.frame, text="None")
+        self.frame = tk.Frame(root, bg="lavender")
+        # Initializing internal widgets - labels and parameters
         self.item_count = ""
+        self.selected_label = tk.Label(self.frame, text="Selected item:", bg="lavender")
+        self.item_label = tk.Label(self.frame, text="None", bg="lavender")
         self.item_count_label = tk.Label(self.frame,
-                                         textvariable=self.item_count)
-        self.items_label = tk.Label(self.frame, text="Items:")
-        self.items_label.pack(side=tk.LEFT, padx=(StatusBarView.PADX*68, StatusBarView.PADX))
-        self.item_count_label.pack(side=tk.LEFT)
-        self.selected_label.pack(side=tk.LEFT, padx=(StatusBarView.PADX*20, StatusBarView.PADX))
+                                         textvariable=self.item_count, bg="lavender")
+        self.items_label = tk.Label(self.frame, text="Items:", bg="lavender")
+        self.items_label.pack(side=tk.LEFT, padx=(StatusBarView.MARGIN_X * 68, StatusBarView.MARGIN_X))
         self.item_label.pack(side=tk.LEFT)
+        self.item_count_label.pack(side=tk.LEFT)
+        self.selected_label.pack(side=tk.LEFT, padx=(StatusBarView.MARGIN_X * 20, StatusBarView.MARGIN_X))
+        # Locate current frame in main's window frame grid
+        self.frame.grid(row=2, column=0, sticky="ew",
+                        ipadx=StatusBarView.MARGIN_X, ipady=StatusBarView.MARGIN_Y)
 
