@@ -62,8 +62,7 @@ class Model:
         dir_dict_details, file_dict_details = Model.create_path_lists(
             file_names, dir_names, dirs_paths, files_paths, files_time, dirs_time, path)
         dir_details = [(dir_name, dir_path, dirs_time.pop(), "File Folder",
-                        "{} KB".format(
-                            int(Model.get_file_size(dir_path, SizeUnit.KB))))
+                        "")
                        for dir_name, dir_path in dir_dict_details.items()]
         file_details = [(file_name, file_path, files_time.pop(),
                          os.path.splitext(file_name)[1].upper() + " File",
