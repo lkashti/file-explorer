@@ -151,7 +151,14 @@ class Controller:
     def handle_move_event(self, event):
         try:
             self.cpy_src_dst()
-            os.remove(self.view.center_frame.buttons_view.src_path)
+            try:
+                if os.path.isfile(self.view.center_frame.buttons_view.src_path):
+                    os.remove(self.view.center_frame.buttons_view.src_path)
+                elif os.path.isdir(self.view.center_frame.buttons_view.src_path):
+                    shutil.rmtree(self.view.center_frame.buttons_view.src_path)
+            except PermissionError:
+                self.view.center_frame.log.log_text.config(
+                    text="-- Error: -- \nYou do not have Permissions\nFor this action")
             self.update_all_views(self.view.navbar.path.get())
             self.view.center_frame.log.log_text.config(text="-- Will be show here --")
         except FileNotFoundError as e:
@@ -204,12 +211,9 @@ class Controller:
 
     def copy_tree(self, src, dst):
         try:
-            print(dst)
-            if os.path.isfile(dst):
-                dst = os.path.join(dst, os.path.basename(src))
-            print(dst)
-            if not os.path.exists(dst):
-                os.makedirs(dst)
+            dst = os.path.join(dst, os.path.basename(src))
+            # if not os.path.exists(dst):
+            os.makedirs(dst)
             contents = os.listdir(src)
             for item in contents:
                 src = self.view.center_frame.buttons_view.src_path + "\\" + item
@@ -218,7 +222,7 @@ class Controller:
                     shutil.copyfile(src, self.view.center_frame.buttons_view.dst_path)
                 elif os.path.isdir(src):
                     self.copy_tree(src, self.view.center_frame.buttons_view.dst_path)
-        except OSError as e:
+        except (OSError,PermissionError,FileExistsError) as e:
             # If the error was caused because the source wasn't a directory
             if e.errno == errno.ENOTDIR:
                 shutil.copytree(src, dst)
