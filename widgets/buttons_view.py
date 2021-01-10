@@ -21,6 +21,7 @@ class ButtonsView:
                               font="Arial 12 bold", anchor="w", padx=ButtonsView.MARGIN_X,
                               bg="lavender")
         self.label.pack(fill=tk.X)
+        
         self.new_folder_btn = tk.Button(self.frame, text="✚", font="Arial 9 bold")
         self.new_folder_btn.pack(side=tk.LEFT,
                                  padx=(ButtonsView.MARGIN_X * 2, ButtonsView.MARGIN_X),

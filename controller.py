@@ -7,6 +7,7 @@ import tkinter as tk
 
 from model import Model
 from view import View
+from widgets.new_folder_view import NewFolderWindow
 
 
 class Controller:
@@ -29,7 +30,6 @@ class Controller:
 
     #   Top Bar Functionality
 
-
     def handle_home_event(self, event):
         """
         Home Button - jump to root folder and clear the history of 'Back' and 'Forward' buttons
@@ -38,7 +38,6 @@ class Controller:
         self.model.back_stack.clear_stack()
         self.model.forward_stack.clear_stack()
         self.update_all_views(self.model.get_home_path())
-
 
     def handle_back_event(self, event):
         """
@@ -50,7 +49,6 @@ class Controller:
             self.model.forward_stack.push(self.view.navbar.path.get())
             self.update_all_views(self.model.back_stack.pop())
 
-
     def handle_forward_event(self, event):
         """
         Forward Button - Display the previews folder, the child of the current path, and push the current
@@ -60,7 +58,6 @@ class Controller:
         if len(self.model.forward_stack.stack) > 0:
             self.model.back_stack.push(self.view.navbar.path.get())
             self.update_all_views(self.model.forward_stack.pop())
-
 
     def handle_enter_path(self, event):
         """
@@ -72,7 +69,6 @@ class Controller:
             self.view.center_frame.log.log_text.config(text="-- Will be show here --")
         except FileNotFoundError as e:
             self.view.center_frame.log.log_text.config(text="Path is not valid")
-
 
     def handle_search_path(self, event):
         """
@@ -100,7 +96,6 @@ class Controller:
         self.view.navbar.search_text.set("")
         self.view.center_frame.log.log_text.config(text="-- Will be show here --")
 
-
     def select_all(self, event):
         """
         Select all the elements in the tree view
@@ -111,7 +106,6 @@ class Controller:
                 self.view.center_frame.right_frame.tree.get_children())
         else:
             self.view.center_frame.right_frame.tree.selection_set()
-
 
     def show_hidden(self, event):
         """
@@ -127,6 +121,8 @@ class Controller:
             self.update_all_views(self.view.navbar.path.get())
             self.view.center_frame.select_view.hidden_checkbox.config(text="Show Hidden")
 
+    def handle_create_folder_event(self, event):
+        new_window = NewFolderWindow(self.root, self)
 
     def handle_copy_event(self, event):
         """
@@ -145,7 +141,6 @@ class Controller:
                                      self.view.center_frame.buttons_view.src_path)))
         )
 
-
     def handle_paste_event(self, event):
         """
         Paste Button - call to function that used by 'pate' and 'move' actions; will be detailed before
@@ -158,7 +153,6 @@ class Controller:
             self.view.center_frame.log.log_text.config(text="-- Will be show here --")
         except FileNotFoundError as e:
             print(e)
-
 
     def handle_move_event(self, event):
         """
@@ -201,6 +195,24 @@ class Controller:
         if os.path.isdir(self.view.center_frame.buttons_view.src_path):
             shutil.rmtree(self.view.center_frame.buttons_view.src_path)
         self.update_all_views(self.view.navbar.path.get())
+
+    def create_new_folder(self, name, window):
+        """Creates a new folder in the current path"""
+        window.destroy()
+        if name.isalnum():
+            current_path = self.view.navbar.path.get()
+            new_folder_path = os.path.join(current_path, name)
+            try:
+                os.mkdir(new_folder_path)
+                self.update_treeview(current_path)
+            except OSError:
+                print(f"Creation of the directory {new_folder_path} failed")
+            else:
+                print(f"Successfully created the directory {new_folder_path}")
+        else:
+            self.view.center_frame.log.log_text.configure(
+                text="-- Error: -- \nFolder name must be alphanumeric"
+            )
 
     def cpy_src_dst(self):
         """
