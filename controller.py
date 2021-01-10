@@ -76,12 +76,17 @@ class Controller:
     '''
 
     def handle_search_path(self, event):
+        self.view.status_bar.show_progressbar()
+        print("search running")
         exclude = ["#4", "#5"]
         try:
             self.results = self.find_all_files(self.view.navbar.search_field.get(),
                                                self.model.get_home_path())
         except FileNotFoundError:
             pass
+        finally:
+            self.view.status_bar.hide_progressbar()
+            print("search done")
         if len(self.results) > 1:
             self.change_tree_view_cols(exclude)
 
