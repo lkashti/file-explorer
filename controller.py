@@ -45,7 +45,8 @@ class Controller:
         Back Button - Display the previews folder, the parent of the current path, and push the current
                       path to 'forward_stack' in addition to use it when 'Forward' button will be clicked
         """
-        self.view.center_frame.log.log_text.config(text="-- Will be show here --")
+        if len(self.view.center_frame.buttons_view.src_path) < 2:
+            self.view.center_frame.log.log_text.config(text="-- Will be show here --")
         if len(self.model.back_stack.stack) > 0:
             self.model.forward_stack.push(self.view.navbar.path.get())
             self.update_all_views(self.model.back_stack.pop())
