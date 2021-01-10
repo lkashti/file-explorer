@@ -21,6 +21,10 @@ class ButtonsView:
                               font="Arial 12 bold", anchor="w", padx=ButtonsView.MARGIN_X,
                               bg="lavender")
         self.label.pack(fill=tk.X)
+        self.new_folder_btn = tk.Button(self.frame, text="✚", font="Arial 9 bold")
+        self.new_folder_btn.pack(side=tk.LEFT,
+                                 padx=(ButtonsView.MARGIN_X * 2, ButtonsView.MARGIN_X),
+                                 pady=ButtonsView.MARGIN_X)
         self.copy_btn = tk.Button(self.frame, text="Copy", font="Arial 9 bold")
         self.copy_btn.pack(side=tk.LEFT, padx=(ButtonsView.MARGIN_X * 2, ButtonsView.MARGIN_X),
                            pady=ButtonsView.MARGIN_X)
@@ -34,6 +38,7 @@ class ButtonsView:
         self.delete_btn.pack(side=tk.LEFT, padx=(ButtonsView.MARGIN_X, ButtonsView.MARGIN_X),
                              pady=ButtonsView.MARGIN_X)
         # Bind to functionality
+        self.new_folder_btn.bind("<Button-1>", self.controller.handle_create_folder_event)
         self.copy_btn.bind("<Button-1>", self.controller.handle_copy_event)
         self.paste_btn.bind("<Button-1>", self.controller.handle_paste_event)
         self.move_btn.bind("<Button-1>", self.controller.handle_copy_event)
