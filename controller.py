@@ -1,9 +1,10 @@
-import tkinter as tk
 from model import Model
 from view import View
+import tkinter as tk
 import operator
 import shutil
 import errno
+import time
 import os
 
 
@@ -17,6 +18,8 @@ class Controller:
         # initialization
         self.folder_details = []
         self.file_details = []
+        self.results = []
+        self.searched_path = ""
         self.update_all_views(self.model.get_home_path())
         self.view.center_frame.favorites_view.load_favorites()
         self.root.mainloop()
@@ -27,10 +30,10 @@ class Controller:
     '''
 
     def handle_home_event(self, event):
-        if self.view.navbar.path.get() != self.model.get_home_path():
-            self.model.back_stack.clear_stack()
-            self.model.forward_stack.clear_stack()
-            self.update_all_views(self.model.get_home_path())
+        self.view.center_frame.log.log_text.config(text="-- Will be show here --")
+        self.model.back_stack.clear_stack()
+        self.model.forward_stack.clear_stack()
+        self.update_all_views(self.model.get_home_path())
 
     '''
     Back Button - Display the previews folder, the parent of the current path, and push the current
@@ -38,6 +41,7 @@ class Controller:
     '''
 
     def handle_back_event(self, event):
+        self.view.center_frame.log.log_text.config(text="-- Will be show here --")
         if len(self.model.back_stack.stack) > 0:
             self.model.forward_stack.push(self.view.navbar.path.get())
             self.update_all_views(self.model.back_stack.pop())
@@ -48,6 +52,7 @@ class Controller:
     '''
 
     def handle_forward_event(self, event):
+        self.view.center_frame.log.log_text.config(text="-- Will be show here --")
         if len(self.model.forward_stack.stack) > 0:
             self.model.back_stack.push(self.view.navbar.path.get())
             self.update_all_views(self.model.forward_stack.pop())
@@ -64,43 +69,37 @@ class Controller:
         except FileNotFoundError as e:
             self.view.center_frame.log.log_text.config(text="Path is not valid")
 
-    #   Left side of center frame Functionality
+    '''
+    Handle search event by using two functions;
+    find_all_files - use os.walk in addition to find an item recursively
+    change_tree_view_cols - change the current tree into new tree
+    '''
+
+    def handle_search_path(self, event):
+        exclude = ["#4", "#5"]
+        try:
+            self.results = self.find_all_files(self.view.navbar.search_field.get(), self.model.get_home_path())
+        except FileNotFoundError:
+            pass
+        if len(self.results) > 1:
+            self.change_tree_view_cols(exclude)
+
+        #   Left side of center frame Functionality
+
+    def handle_focus_in_search_bar(self, event):
+        self.view.navbar.search_text.set("")
+        self.view.center_frame.log.log_text.config(text="-- Will be show here --")
     '''
     Select all the elements in the tree view 
     Flag is using to handle an UI error after Disable the 'None' checkbox
     '''
 
     def select_all(self, event):
-        if not self.view.center_frame.select_view.checkbox_flag:
-            if self.view.center_frame.select_view.all_var.get() == 0:
-                self.view.center_frame.select_view.checkbox_flag = True
-                self.view.center_frame.select_view.none_checkbox.config(
-                    state=tk.DISABLED)
-                self.view.center_frame.right_frame.tree.selection_set(
-                    self.view.center_frame.right_frame.tree.get_children())
+        if self.view.center_frame.select_view.all_var.get() == 0:
+            self.view.center_frame.right_frame.tree.selection_set(
+                self.view.center_frame.right_frame.tree.get_children())
         else:
-            if self.view.center_frame.select_view.all_var.get() == 1:
-                self.view.center_frame.select_view.none_checkbox.config(
-                    state=tk.NORMAL)
-                self.view.center_frame.select_view.checkbox_flag = False
-
-    '''
-    Deselect all the elements, None of it, in the tree view 
-    Flag is using to handle a UI error after Disable the 'All' checkbox
-    '''
-
-    def select_none(self, event):
-        if not self.view.center_frame.select_view.checkbox_flag:
-            if self.view.center_frame.select_view.none_var.get() == 0:
-                self.view.center_frame.select_view.checkbox_flag = True
-                self.view.center_frame.select_view.all_checkbox.config(
-                    state=tk.DISABLED)
-                self.view.center_frame.right_frame.tree.selection_set()
-        else:
-            if self.view.center_frame.select_view.none_var.get() == 1:
-                self.view.center_frame.select_view.all_checkbox.config(
-                    state=tk.NORMAL)
-                self.view.center_frame.select_view.checkbox_flag = False
+            self.view.center_frame.right_frame.tree.selection_set()
 
     '''
     Display hidden files when 'Hidden' checkbox returns 0 value 
@@ -125,8 +124,9 @@ class Controller:
     def handle_copy_event(self, event):
         self.view.center_frame.buttons_view.src_path = self.view.navbar.path.get() \
                                                        + "\\" + self.view.center_frame.buttons_view.file_name
-        self.view.center_frame.log.log_text.config(text="{}".format("Source: "+
-            os.path.basename(os.path.normpath(self.view.center_frame.buttons_view.src_path))))
+        self.view.center_frame.log.log_text.config(text="{}".format("Source: " +
+                                                                    os.path.basename(os.path.normpath(
+                                                                        self.view.center_frame.buttons_view.src_path))))
 
     '''
     Paste Button - call to function that used by 'pate' and 'move' actions; will be detailed before
@@ -151,7 +151,14 @@ class Controller:
     def handle_move_event(self, event):
         try:
             self.cpy_src_dst()
-            os.remove(self.view.center_frame.buttons_view.src_path)
+            try:
+                if os.path.isfile(self.view.center_frame.buttons_view.src_path):
+                    os.remove(self.view.center_frame.buttons_view.src_path)
+                elif os.path.isdir(self.view.center_frame.buttons_view.src_path):
+                    shutil.rmtree(self.view.center_frame.buttons_view.src_path)
+            except PermissionError:
+                self.view.center_frame.log.log_text.config(
+                    text="-- Error: -- \nYou do not have Permissions\nFor this action")
             self.update_all_views(self.view.navbar.path.get())
             self.view.center_frame.log.log_text.config(text="-- Will be show here --")
         except FileNotFoundError as e:
@@ -186,8 +193,6 @@ class Controller:
     def cpy_src_dst(self):
         if len(self.view.center_frame.buttons_view.src_path) > 2:
             without_extra_slash = os.path.normpath(self.view.center_frame.buttons_view.src_path)
-            # self.view.center_frame.log.log_text.config(text="{}".format(
-            #     basename(normpath(self.view.center_frame.buttons_view.src_path))))
             if os.path.isfile(self.view.center_frame.buttons_view.src_path):
                 file_to_copy = os.path.basename(without_extra_slash)
                 self.view.center_frame.buttons_view.dst_path = self.view.navbar.path.get() + "\\" + file_to_copy
@@ -207,8 +212,8 @@ class Controller:
     def copy_tree(self, src, dst):
         try:
             dst = os.path.join(dst, os.path.basename(src))
-            if not os.path.exists(dst):
-                os.makedirs(dst)
+            # if not os.path.exists(dst):
+            os.makedirs(dst)
             contents = os.listdir(src)
             for item in contents:
                 src = self.view.center_frame.buttons_view.src_path + "\\" + item
@@ -217,7 +222,7 @@ class Controller:
                     shutil.copyfile(src, self.view.center_frame.buttons_view.dst_path)
                 elif os.path.isdir(src):
                     self.copy_tree(src, self.view.center_frame.buttons_view.dst_path)
-        except OSError as e:
+        except (OSError,PermissionError,FileExistsError) as e:
             # If the error was caused because the source wasn't a directory
             if e.errno == errno.ENOTDIR:
                 shutil.copytree(src, dst)
@@ -260,12 +265,14 @@ class Controller:
 
     def on_list_view_select(self, event):
         if self.view.center_frame.favorites_lb_view.listbox.size() > 0:
-            w = event.widget
-            index = int(w.curselection()[0])
-            value = w.get(index)
-            path = value[3:]
-            self.on_favorite_click(path)
-
+            try:
+                w = event.widget
+                index = int(w.curselection()[0])
+                value = w.get(index)
+                path = value[3:]
+                self.on_favorite_click(path)
+            except IndexError:
+                pass
     '''
     When click an element the path will display in the tree view     
     '''
@@ -293,9 +300,11 @@ class Controller:
         if os.path.isdir(os.path.join(self.view.navbar.path.get(), item_text)):
             new_path = os.path.join(self.view.navbar.path.get(), item_text)
             self.model.back_stack.push(self.view.navbar.path.get())
-            self.model.forward_stack.clear_stack()
-            self.update_all_views(new_path)
-            self.view.status_bar.item_label.config(text="None")
+        elif os.path.isdir(os.path.dirname(self.searched_path)):
+            new_path = os.path.dirname(self.searched_path)
+        self.model.forward_stack.clear_stack()
+        self.update_all_views(new_path)
+        self.view.status_bar.item_label.config(text="None")
 
     '''
     Display the selected file name in the status bar
@@ -306,12 +315,20 @@ class Controller:
         line_tup = self.view.center_frame.right_frame.tree.item(index)
         self.view.center_frame.buttons_view.file_name = line_tup['text']
         self.view.status_bar.item_label.config(text=line_tup['text'])
+        catch = self.view.center_frame.right_frame.tree.focus()
+        try:
+            self.searched_path = self.view.center_frame.right_frame.tree.item(catch)['values'][1]
+        except IndexError:
+            self.searched_path = ""
 
     '''
     Update children of the tree view be removing old children and inserting current path children    
     '''
 
     def update_treeview(self, path):
+        exclude = ["#2"]
+        self.change_tree_view_cols(exclude)
+        self.change_tree_view_cols(exclude)
         self.view.center_frame.right_frame.tree.delete(
             *self.view.center_frame.right_frame.tree.get_children())
         self.folder_details, self.file_details = self.model.get_content_from_path(
@@ -319,13 +336,18 @@ class Controller:
         self.view.center_frame.show_folders_and_files(self.folder_details,
                                                       self.file_details)
 
-    def sort_tree_view(self,index):
+    '''
+    Sort a column from tree view by the index of the column    
+    '''
+
+    def sort_tree_view(self, index):
         self.view.center_frame.right_frame.tree.delete(
             *self.view.center_frame.right_frame.tree.get_children())
-        self.folder_details.sort(key = operator.itemgetter(index))
+        self.folder_details.sort(key=operator.itemgetter(index))
         self.file_details.sort(key=operator.itemgetter(index))
         self.view.center_frame.show_folders_and_files(self.folder_details,
                                                       self.file_details)
+
     '''
     Update all views - tree, navigation bar, status bar items counter    
     '''
@@ -336,3 +358,34 @@ class Controller:
         self.view.status_bar.item_count = self.model.get_folder_file_count(
             path, self.view.center_frame.select_view.hidden_flag)
         self.view.status_bar.item_count_label.config(text=self.view.status_bar.item_count)
+
+    def find_all_files(self, name, path):
+        result = []
+        try:
+            temp_time = time.strftime('%m/%d/%Y', time.gmtime(os.path.getmtime(path)))
+        except FileNotFoundError:
+            temp_time = "No Permission"
+        for root, dirs, files in os.walk(path):
+            if name in files:
+                result.append((name, os.path.join(root, name), temp_time))
+            if name in dirs:
+                result.append((name, os.path.join(root, name), temp_time))
+        if not result:
+            self.view.center_frame.log.log_text.config(text="-- File Not Found --")
+        return result
+
+    def change_tree_view_cols(self, excludes):
+        displaycolumns = []
+        self.view.center_frame.right_frame.tree.delete(
+            *self.view.center_frame.right_frame.tree.get_children())
+        self.view.center_frame.right_frame.exclusion_list.clear()
+        for i in excludes:
+            self.view.center_frame.right_frame.exclusion_list.append(i)
+        for col in self.view.center_frame.right_frame.tree["columns"]:
+            if not "%s" % col in self.view.center_frame.right_frame.exclusion_list:
+                displaycolumns.append(col)
+        self.view.center_frame.right_frame.tree["displaycolumns"] = displaycolumns
+        for result in self.results:
+            self.view.center_frame.right_frame.tree.insert("", index="end",
+                                                           text=result[0],
+                                                           values=result[0:])

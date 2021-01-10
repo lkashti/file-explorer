@@ -66,7 +66,8 @@ class NavBar:
         self.search_field.insert(0, "Search...")
         # Bind to functionality
         self.search_field.bind("<FocusIn>",
-                               lambda e: self.search_text.set(""))
+                                self.controller.handle_focus_in_search_bar)
+
         self.search_field.bind("<FocusOut>",
                                lambda e: self.search_text.set("Search..."))
         self.home_btn.bind("<ButtonRelease>", self.controller.handle_home_event)
@@ -74,6 +75,7 @@ class NavBar:
         self.forward_btn.bind("<ButtonRelease>",
                               self.controller.handle_forward_event)
         self.path_field.bind('<Return>', self.controller.handle_enter_path)
+        self.search_field.bind('<Return>',self.controller.handle_search_path)
 
 
 class CenterFrame:
@@ -123,4 +125,3 @@ class CenterFrame:
                                          text=file_detail[0],
                                          values=file_detail[0:])
             idx += 1
-

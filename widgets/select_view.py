@@ -16,20 +16,15 @@ class SelectView:
                                      font="Arial 12 bold", anchor="w", padx=SelectView.MARGIN_X, bg="lavender")
         self.select_label.pack(fill=tk.X)
         self.all_var = tk.IntVar()
-        self.none_var = tk.IntVar()
         self.hidden_var = tk.IntVar()
-        self.checkbox_flag = False
         self.hidden_flag = False
         # Initializing internal widgets - checkboxes
         self.all_checkbox = tk.Checkbutton(self.frame, text="All", font="Arial 10", variable=self.all_var, bg="lavender")
-        self.none_checkbox = tk.Checkbutton(self.frame, text="None", font="Arial 10", variable=self.none_var, bg="lavender")
         self.hidden_checkbox = tk.Checkbutton(self.frame, text="Show Hidden", font="Arial 10", variable=self.hidden_var, bg="lavender")
         self.all_checkbox.pack(side=tk.LEFT, padx=(10, 4))
-        self.none_checkbox.pack(side=tk.LEFT, padx=(4, 4))
         self.hidden_checkbox.pack(side=tk.LEFT, padx=(4, 4))
         # Bind to functionality
         self.all_checkbox.bind("<Button-1>", self.controller.select_all)
-        self.none_checkbox.bind("<Button-1>", self.controller.select_none)
         self.hidden_checkbox.bind("<Button-1>", self.controller.show_hidden)
         # Locate current frame in left's side frame grid
         self.frame.grid(row=0, column=0,
