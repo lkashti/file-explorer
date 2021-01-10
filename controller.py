@@ -262,7 +262,7 @@ class Controller:
         # delete from view
         list_box = self.view.center_frame.favorites_lb_view.listbox
         selected = list_box.curselection()
-        if selected is not ():
+        if selected != ():
             # the split is used to dismiss the star icon
             selected_path = list_box.get(selected).split(" ", 2)[2]
             list_box.delete(selected)
