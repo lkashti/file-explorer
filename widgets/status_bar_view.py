@@ -3,11 +3,12 @@ import tkinter.ttk as ttk
 
 
 class StatusBarView:
+    """
+    Status bar widget - displays number of items, current selected item and a progressbar when
+    a long computation occurs
+    """
     MARGIN_X = 4
     MARGIN_Y = 5
-    '''
-    Status bar widget - display number of items and current selected item
-    '''
 
     def __init__(self, root, controller):
         self.controller = controller

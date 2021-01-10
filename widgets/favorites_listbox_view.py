@@ -2,13 +2,14 @@ import tkinter as tk
 
 
 class ListBox:
+    """
+    List box widget - the list of the favorites
+    In a separate frame because of UI constrains
+    """
     PAD = 3
     MARGIN_X = 5
     MARGIN_Y = 10
-    '''
-    List box widget - the list of the favorites
-    In a separate frame because of UI constrains  
-    '''
+
     def __init__(self, root, controller):
         self.controller = controller
         self.frame = tk.Frame(root)

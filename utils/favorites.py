@@ -1,10 +1,11 @@
-import os
 import json
+import os
 
 
 class FavoritesHandler:
     def __init__(self):
         pass
+
     # self.favorites = []
 
     # init empty favorites file

@@ -2,12 +2,13 @@ import tkinter as tk
 
 
 class FavoritesView:
+    """
+    Favorites widget - user can add and remove his favorite directories to a list
+    """
     PAD = 3
     MARGIN_X = 5
     MARGIN_Y = 10
-    '''
-    Favorites widget - user can add and remove his favorite directories to a list  
-    '''
+
     def __init__(self, root, controller):
         self.controller = controller
         self.frame = tk.Frame(root, bg="lavender")
