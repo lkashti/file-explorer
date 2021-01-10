@@ -1,15 +1,18 @@
+import tkinter as tk
+import tkinter.ttk as ttk
+
+from widgets.buttons_view import ButtonsView
 from widgets.favorites_bar_view import FavoritesView
 from widgets.favorites_listbox_view import ListBox
+from widgets.log_view import Log
 from widgets.select_view import SelectView
 from widgets.status_bar_view import StatusBarView
 from widgets.tree_view import TreeView
-from widgets.buttons_view import ButtonsView
-from widgets.log_view import Log
-import tkinter.ttk as ttk
-import tkinter as tk
 
 
 class View:
+    """Main window, holds the root element of tkinter"""
+
     def __init__(self, root: tk.Tk, controller):
         self.controller = controller
         root.title("File Explorer")
@@ -32,12 +35,13 @@ class View:
 
 
 class NavBar:
+    """
+    Top bar widget - navigation buttons, path and search fields
+    """
     PAD = 3
     MARGIN_X = 5
     MARGIN_Y = 10
-    '''
-    Top bar widget - navigation buttons, path and search fields  
-    '''
+
     def __init__(self, root, controller, width):
         self.controller = controller
         self.navbar_frame = tk.Frame(root, bg="lavender")
@@ -66,7 +70,7 @@ class NavBar:
         self.search_field.insert(0, "Search...")
         # Bind to functionality
         self.search_field.bind("<FocusIn>",
-                                self.controller.handle_focus_in_search_bar)
+                               self.controller.handle_focus_in_search_bar)
 
         self.search_field.bind("<FocusOut>",
                                lambda e: self.search_text.set("Search..."))
@@ -75,18 +79,19 @@ class NavBar:
         self.forward_btn.bind("<ButtonRelease>",
                               self.controller.handle_forward_event)
         self.path_field.bind('<Return>', self.controller.handle_enter_path)
-        self.search_field.bind('<Return>',self.controller.handle_search_path)
+        self.search_field.bind('<Return>', self.controller.handle_search_path)
 
 
 class CenterFrame:
+    """
+    Central widget - splits into two part
+    Left side - features and controlling the app
+    Right side - Folders and files tree view
+    """
     PAD = 3
     MARGIN_X = 5
     MARGIN_Y = 10
-    '''
-    Central widget - splits into two part 
-    Left side - features and controlling the app
-    Right side - Folders and files tree view   
-    '''
+
     def __init__(self, root, controller):
         self.controller = controller
         self.center_frame = tk.Frame(root, bd=1, relief=tk.SUNKEN)
@@ -114,6 +119,11 @@ class CenterFrame:
 
     # Display items
     def show_folders_and_files(self, folder_details, file_details):
+        """Inserts formatted data to the treeview
+
+        :param folder_details: list - formatted folder details to be represented in the treeview
+        :param file_details: list - formatted file details to be represented in the treeview
+        """
         idx = 1
         for folder_detail in folder_details:
             self.right_frame.tree.insert("", index="end", iid=idx,

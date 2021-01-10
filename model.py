@@ -1,9 +1,10 @@
-from utils.navigation_stack import NavigationStack
-from utils.favorites import FavoritesHandler
-import time
-import glob
 import enum
+import glob
 import os
+import time
+
+from utils.favorites import FavoritesHandler
+from utils.navigation_stack import NavigationStack
 
 
 # Enum for size units
@@ -15,6 +16,8 @@ class SizeUnit(enum.Enum):
 
 
 class Model:
+    """Represents and handles the data across all the application"""
+
     def __init__(self):
         self.back_stack = NavigationStack()
         self.forward_stack = NavigationStack()
@@ -22,10 +25,12 @@ class Model:
 
     @staticmethod
     def get_home_path():
+        """Retrieves the root directory"""
         return os.path.expanduser("~")
 
     @staticmethod
     def get_folder_file_count(path, hidden):
+        """Retrieves count of all elements within the searched path"""
         if hidden:
             try:
                 num = len(os.listdir(path))
@@ -40,6 +45,13 @@ class Model:
 
     @staticmethod
     def get_content_from_path(path, hidden):
+        """
+        Retrieves formatted details about content of a folder,  to be represented in the view
+
+        :param path: path to be searched for content
+        :param hidden: flag - indicates whether hidden files will show
+        :return: tuple of two lists, details to be represented in the view
+        """
         try:
             contents = os.listdir(path)
         except PermissionError or TypeError:
@@ -95,7 +107,8 @@ class Model:
         return Model.convert_unit(size, size_type)
 
     @staticmethod
-    def create_path_lists(file_names, dir_names, dirs_paths, files_paths, files_time, dirs_time, path):
+    def create_path_lists(file_names, dir_names, dirs_paths, files_paths, files_time, dirs_time,
+                          path):
         dir_dict_details = {}
         file_dict_details = {}
         for item in dir_names:
@@ -118,7 +131,8 @@ class Model:
                 break
         for file_name, file_path in file_dict_details.items():
             try:
-                files_time.append(time.strftime('%m/%d/%Y', time.gmtime(os.path.getmtime(file_path))))
+                files_time.append(
+                    time.strftime('%m/%d/%Y', time.gmtime(os.path.getmtime(file_path))))
             except FileNotFoundError:
                 files_time.append("No Permission")
 

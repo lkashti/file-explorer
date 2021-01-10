@@ -1,5 +1,6 @@
-
 class NavigationStack:
+    """Stack implementation used to track your location history while navigating"""
+
     def __init__(self):
         self.stack = []
 
@@ -16,4 +17,3 @@ class NavigationStack:
 
     def clear_stack(self):
         self.stack.clear()
-
