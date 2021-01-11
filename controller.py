@@ -88,8 +88,8 @@ class Controller:
         finally:
             self.view.status_bar.hide_progressbar()
             print("search done")
-        if len(self.results) > 1:
-            self.change_tree_view_cols(exclude)
+            if len(self.results) > 0:
+                self.change_tree_view_cols(exclude)
 
         #   Left side of center frame Functionality
 
