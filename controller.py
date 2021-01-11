@@ -34,7 +34,7 @@ class Controller:
         """
         Home Button - jump to root folder and clear the history of 'Back' and 'Forward' buttons
         """
-        self.view.center_frame.log.log_text.config(text="-- Will be show here --")
+        self.view.center_frame.log.log_text.config(text="-- Will be shown here --")
         self.model.back_stack.clear_stack()
         self.model.forward_stack.clear_stack()
         self.update_all_views(self.model.get_home_path())
@@ -45,7 +45,7 @@ class Controller:
                       path to 'forward_stack' in addition to use it when 'Forward' button will be clicked
         """
         if len(self.view.center_frame.buttons_view.src_path) < 2:
-            self.view.center_frame.log.log_text.config(text="-- Will be show here --")
+            self.view.center_frame.log.log_text.config(text="-- Will be shown here --")
         if len(self.model.back_stack.stack) > 0:
             self.model.forward_stack.push(self.view.navbar.path.get())
             self.update_all_views(self.model.back_stack.pop())
@@ -55,7 +55,7 @@ class Controller:
         Forward Button - Display the previews folder, the child of the current path, and push the current
                          path to 'Back_stack' in addition to use it when 'Back' button will be clicked
         """
-        self.view.center_frame.log.log_text.config(text="-- Will be show here --")
+        self.view.center_frame.log.log_text.config(text="-- Will be shown here --")
         if len(self.model.forward_stack.stack) > 0:
             self.model.back_stack.push(self.view.navbar.path.get())
             self.update_all_views(self.model.forward_stack.pop())
@@ -67,7 +67,7 @@ class Controller:
         """
         try:
             self.update_all_views(self.view.navbar.path.get())
-            self.view.center_frame.log.log_text.config(text="-- Will be show here --")
+            self.view.center_frame.log.log_text.config(text="-- Will be shown here --")
         except FileNotFoundError as e:
             self.view.center_frame.log.log_text.config(text="Path is not valid")
 
@@ -95,7 +95,7 @@ class Controller:
 
     def handle_focus_in_search_bar(self, event):
         self.view.navbar.search_text.set("")
-        self.view.center_frame.log.log_text.config(text="-- Will be show here --")
+        self.view.center_frame.log.log_text.config(text="-- Will be shown here --")
 
     def select_all(self, event):
         """
@@ -151,7 +151,7 @@ class Controller:
         try:
             self.cpy_src_dst()
             self.update_all_views(self.view.navbar.path.get())
-            self.view.center_frame.log.log_text.config(text="-- Will be show here --")
+            self.view.center_frame.log.log_text.config(text="-- Will be shown here --")
         except FileNotFoundError as e:
             print(e)
 
@@ -172,7 +172,7 @@ class Controller:
                 self.view.center_frame.log.log_text.config(
                     text="-- Error: -- \nYou do not have Permissions\nFor this action")
             self.update_all_views(self.view.navbar.path.get())
-            self.view.center_frame.log.log_text.config(text="-- Will be show here --")
+            self.view.center_frame.log.log_text.config(text="-- Will be shown here --")
         except FileNotFoundError as e:
             print(e.errno)
 

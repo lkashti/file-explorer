@@ -13,9 +13,9 @@ class Log:
         self.controller = controller
         self.frame = tk.Frame(root, bg="lavender")
         # Initializing internal widgets - labels
-        self.label = tk.Label(self.frame, text="Log",
+        self.label = tk.Label(self.frame, text="Info",
                               font="Arial 12 bold", anchor="w", padx=Log.MARGIN_X, bg="lavender")
-        self.log_text = tk.Label(self.frame, text="-- Will be show here --",
+        self.log_text = tk.Label(self.frame, text="-- Will be shown here --",
                                  font="Arial 10 bold", anchor="w", padx=Log.MARGIN_X, bg="lavender")
         self.label.pack(fill=tk.X)
         self.log_text.pack()
