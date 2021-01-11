@@ -13,7 +13,7 @@ class SelectView:
         self.controller = controller
         self.frame = tk.Frame(root, bg="lavender")
         # Initializing parameters
-        self.select_label = tk.Label(self.frame, text="Select Items",
+        self.select_label = tk.Label(self.frame, text="Options",
                                      font="Arial 12 bold", anchor="w", padx=SelectView.MARGIN_X,
                                      bg="lavender")
         self.select_label.pack(fill=tk.X)

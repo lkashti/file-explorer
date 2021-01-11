@@ -17,7 +17,7 @@ class ButtonsView:
         self.dst_path = ""
         self.file_name = ""
         # Initializing internal widgets - buttons and labels
-        self.label = tk.Label(self.frame, text="Options",
+        self.label = tk.Label(self.frame, text="Actions",
                               font="Arial 12 bold", anchor="w", padx=ButtonsView.MARGIN_X,
                               bg="lavender")
         self.label.pack(fill=tk.X)
