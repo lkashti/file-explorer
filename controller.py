@@ -265,7 +265,7 @@ class Controller:
         if self.view.navbar.path.get() not in favs:
             fav_listbox = self.view.center_frame.favorites_lb_view.listbox
             fav_listbox.insert("end",
-                               " ⭐ " + self.view.navbar.path.get())
+                               " ⭐ " + os.path.basename(self.view.navbar.path.get()))
             # store favorite object in json file
             self.model.favorites.store(self.view.navbar.path.get())
 
@@ -275,13 +275,17 @@ class Controller:
         """
         # delete from view
         list_box = self.view.center_frame.favorites_lb_view.listbox
-        selected = list_box.curselection()
-        if selected != ():
+        fav = self.model.favorites.get()
+        try:
+            index = int(list_box.curselection()[0])
+        except IndexError:
+            index = ()
+            print("No favorite was selected")
+        if index != ():
             # the split is used to dismiss the star icon
-            selected_path = list_box.get(selected).split(" ", 2)[2]
-            list_box.delete(selected)
+            list_box.delete(index)
             # remove from json file
-            self.model.favorites.remove(selected_path)
+            self.model.favorites.remove(fav[index]["path"])
 
     def on_list_view_select(self, event):
         """
@@ -293,7 +297,6 @@ class Controller:
                 w = event.widget
                 index = int(w.curselection()[0])
                 favorites = self.model.favorites.get()
-                favorites[index]["path"]
                 self.on_favorite_click(favorites[index]["path"])
             except IndexError:
                 pass
