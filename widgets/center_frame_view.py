@@ -32,11 +32,11 @@ class CenterFrame:
         self.left_frame = tk.Frame(self.center_frame, bg="lavender")
         self.left_frame.grid(row=0, column=0, sticky="nsew")
         ttk.Separator(self.left_frame, orient=tk.HORIZONTAL).grid(row=1,
-                                                                  ipadx=120)
+                                                                  ipadx=130)
         ttk.Separator(self.left_frame, orient=tk.HORIZONTAL).grid(row=3,
-                                                                  ipadx=120)
+                                                                  ipadx=130)
         ttk.Separator(self.left_frame, orient=tk.HORIZONTAL).grid(row=6,
-                                                                  ipadx=120)
+                                                                  ipadx=130)
         # Initialize widgets for left side
         self.favorites_view = FavoritesView(self.left_frame, controller)
         self.favorites_lb_view = ListBox(self.left_frame, controller)

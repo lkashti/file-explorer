@@ -292,9 +292,9 @@ class Controller:
             try:
                 w = event.widget
                 index = int(w.curselection()[0])
-                value = w.get(index)
-                path = value[3:]
-                self.on_favorite_click(path)
+                favorites = self.model.favorites.get()
+                favorites[index]["path"]
+                self.on_favorite_click(favorites[index]["path"])
             except IndexError:
                 pass
 
