@@ -38,7 +38,6 @@ class NavBar:
         # Bind to functionality
         self.search_field.bind("<FocusIn>",
                                self.controller.handle_focus_in_search_bar)
-
         self.search_field.bind("<FocusOut>",
                                lambda e: self.search_text.set("Search..."))
         self.home_btn.bind("<ButtonRelease>", self.controller.handle_home_event)

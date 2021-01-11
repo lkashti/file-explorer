@@ -38,4 +38,4 @@ class FavoritesView:
         fav_listbox = self.controller.view.center_frame.favorites_lb_view.listbox
         for fav in favorites:
             fav_listbox.insert("end",
-                               " ⭐ " + fav.get("path"))
+                               " ⭐ " + fav.get("name"))
